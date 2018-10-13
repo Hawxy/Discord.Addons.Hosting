@@ -26,9 +26,9 @@ namespace Discord.Addons.Hosting
         /// <summary>
         /// Creates a discord client with the provided configuration. Do not use in combination with <see cref="AddDiscordClient"/>
         /// </summary>
-        /// <param name="config">The Discord client configuration object.</param>
+        /// <param name="config">The Discord client configuration object. Ensure the type is compatible with the client type <typeparamref name="T"/></param>
         /// <exception cref="InvalidOperationException">Thrown if client initialized more than once</exception>
-        public void UseDiscordConfiguration(DiscordSocketConfig config)
+        public void UseDiscordConfiguration<Y>(Y config) where Y : DiscordConfig
         {
             if(_client != null)
                 throw new InvalidOperationException("Client can only be initialized once!");
