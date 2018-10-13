@@ -50,9 +50,6 @@ namespace Discord.Addons.Hosting
         /// <summary>
         /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.Net client. />
         /// </summary>
-        /// <remarks>
-        /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
-        /// </remarks>
         /// <param name="builder">The host builder to configure.</param> 
         /// <returns>The (generic) host builder.</returns>
         public static IHostBuilder UseCommandService(this IHostBuilder builder)
