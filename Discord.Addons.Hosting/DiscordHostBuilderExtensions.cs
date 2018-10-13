@@ -19,11 +19,11 @@ namespace Discord.Addons.Hosting
         /// </remarks>
         /// <typeparam name="T">The type of Discord.Net client. Type must inherit from <see cref="BaseSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
-        /// <param name="config">The delegate for configuring the <see cref="DiscordBuilder{T}" /> that will be used to construct the discord client.</param>
+        /// <param name="config">The delegate for configuring the <see cref="DiscordClientHandler{T}" /> that will be used to construct the discord client.</param>
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
         /// <exception cref="InvalidOperationException">Thrown if client is already logged in</exception>
-        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordBuilder<T>> config) where T: BaseSocketClient, new()
+        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: BaseSocketClient, new()
         {
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
@@ -33,9 +33,9 @@ namespace Discord.Addons.Hosting
                 var token = context.Configuration["token"];
                 TokenUtils.ValidateToken(TokenType.Bot, token);
 
-                var dsc = new DiscordBuilder<T>();
+                var dsc = new DiscordClientHandler<T>();
                 config(context, dsc);
-                var client = dsc.Build();
+                var client = dsc.GetClient();
 
                 if(client.LoginState != LoginState.LoggedOut)
                     throw new InvalidOperationException("Client logged in before host startup! Make sure you aren't calling LoginAsync manually");
