@@ -1,5 +1,7 @@
-# Discord.Addons.Hosting
-Discord.Net hosting with Microsoft.Extensions.Hosting. 
+# Discord.Addons.Hosting 
+[![Build Status](https://dev.azure.com/GithubHawxy/Discord.Addons.Hosting/_apis/build/status/Hawxy.Discord.Addons.Hosting)](https://dev.azure.com/GithubHawxy/Discord.Addons.Hosting/_build/latest?definitionId=2)
+
+Discord.Net hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
 This package provides extensions to IHostBuilder that will run a Discord.Net socket client via IHostedService. 
 
 ```csharp
