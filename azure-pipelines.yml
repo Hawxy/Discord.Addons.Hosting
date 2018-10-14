@@ -31,7 +31,7 @@ steps:
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
-    buildProperties: Author="Hawxy";Owner="Hawxy";Summary="Discord.Net hosting with IHostedService and Microsoft.Extensions.Hosting";LicenseURL="https://github.com/Hawxy/Discord.Addons.Hosting/blob/azure-pipelines/LICENSE";RepositoryURL="https://github.com/Hawxy/Discord.Addons.Hosting";Copyright="Hawxy 2018"
+    buildProperties: Authors="Hawxy";Owners="Hawxy";Description="Discord.Net hosting with IHostedService and Microsoft.Extensions.Hosting";RequireLicenseAcceptance="true";LicenseURL="https://github.com/Hawxy/Discord.Addons.Hosting/blob/azure-pipelines/LICENSE";ProjectURL="https://github.com/Hawxy/Discord.Addons.Hosting";Copyright="Hawxy 2018"
     
   displayName: 'Package'
 
