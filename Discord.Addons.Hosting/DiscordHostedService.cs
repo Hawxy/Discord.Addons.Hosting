@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Discord.Addons.Hosting
 {
-    internal class DiscordHostedService<T> : IHostedService, IDisposable where T: BaseSocketClient
+    internal class DiscordHostedService<T> : IHostedService, IDisposable where T: BaseSocketClient, new()
     {
         private readonly ILogger<DiscordHostedService<T>> _logger;
         private readonly T _client;
@@ -22,7 +22,9 @@ namespace Discord.Addons.Hosting
             _client = client;
             _config = config;
 
-            var adapter = new LogAdapter(logger);
+            var adapter = services.GetRequiredService<LogAdapter>();
+            //workaround for correct logging category
+            adapter.UseLogger(logger);
             client.Log += adapter.Log;
             var cs = services.GetService<CommandService>();
             if (cs != null)

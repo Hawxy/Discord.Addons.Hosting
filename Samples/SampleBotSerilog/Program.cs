@@ -56,6 +56,8 @@ namespace SampleBotSerilog
                     config.LogLevel = LogSeverity.Verbose;
                     config.DefaultRunMode = RunMode.Async;
                 })
+                //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for most people.
+                .ConfigureDiscordLogFormat((message, exception) => $"{message.Source}: {message.Exception?.ToString() ?? message.Message}")
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<CommandHandler>();

@@ -30,7 +30,7 @@ namespace SampleBotSimple
                 .ConfigureLogging(x =>
                 {
                     x.SetMinimumLevel(LogLevel.Information);
-                    //its not pretty, but it works!
+                    //This works but isn't very pretty. I would highly suggest using Serilog or some other third-party logger
                     //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.1#built-in-logging-providers for more logging options
                     x.AddConsole();
 
@@ -48,6 +48,8 @@ namespace SampleBotSimple
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService()
+                //This format might be better if you're NOT using Serilog or any other third-party providers
+                .ConfigureDiscordLogFormat((message, exception) => message.ToString())
                 .ConfigureServices((context, services) =>
                 {
                     //Add any other services here

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ namespace Discord.Addons.Hosting
 
             builder.ConfigureServices((context, collection) =>
             {
+                if (collection.Any(x => x.ServiceType == typeof(T)))
+                    throw new InvalidOperationException($"Cannot add more than one {typeof(T)} to host");
+
                 var token = context.Configuration["token"];
                 TokenUtils.ValidateToken(TokenType.Bot, token);
 
@@ -41,6 +45,7 @@ namespace Discord.Addons.Hosting
                     throw new InvalidOperationException("Client logged in before host startup! Make sure you aren't calling LoginAsync manually");
                 
                 collection.AddSingleton(client);
+                collection.AddSingleton<LogAdapter>();
                 collection.AddHostedService<DiscordHostedService<T>>();
             });
 
@@ -52,10 +57,13 @@ namespace Discord.Addons.Hosting
         /// </summary>
         /// <param name="builder">The host builder to configure.</param> 
         /// <returns>The (generic) host builder.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
         public static IHostBuilder UseCommandService(this IHostBuilder builder)
         {
             builder.ConfigureServices((context, collection) =>
             {
+                if (collection.Any(x => x.ServiceType == typeof(CommandService)))
+                    throw new InvalidOperationException($"Cannot add more than one CommandService to host");
                 collection.AddSingleton<CommandService>();
             });
             return builder;
@@ -71,6 +79,7 @@ namespace Discord.Addons.Hosting
         /// <param name="config">The delegate for configuring the <see cref="CommandServiceConfig" /> that will be used to initialise the service.</param>
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
+        /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
         public static IHostBuilder UseCommandService(this IHostBuilder builder, Action<HostBuilderContext, CommandServiceConfig> config)
         {
             if (config == null)
@@ -78,11 +87,41 @@ namespace Discord.Addons.Hosting
 
             builder.ConfigureServices((context, collection) =>
             {
+                if (collection.Any(x => x.ServiceType == typeof(CommandService)))
+                    throw new InvalidOperationException($"Cannot add more than one {typeof(CommandService)} to host");
+
                 var csc = new CommandServiceConfig();
                 config(context, csc);
                 var service = new CommandService(csc);
                 collection.AddSingleton(service);
 
+            });
+
+            return builder;
+        }
+
+
+        /// <summary>
+        /// Provides a custom format to the <see cref="LogAdapter"/> used by the Client and CommandService. />
+        /// </summary>
+        /// <remarks>
+        /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
+        /// </remarks>
+        /// <param name="builder">The host builder to configure.</param>
+        /// <param name="formatter">A custom message formatter</param>
+        /// <returns>The (generic) host builder.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if formatter is null</exception>
+        /// <exception cref="InvalidOperationException">Thrown if a formatter is already added to the collection</exception>
+        public static IHostBuilder ConfigureDiscordLogFormat(this IHostBuilder builder, Func<LogMessage, Exception, string> formatter)
+        {
+            if(formatter == null)
+                throw new ArgumentNullException(nameof(formatter));
+
+            builder.ConfigureServices((context, collection) =>
+            {
+                if (collection.Any(x => x.ServiceType == typeof(Func<LogMessage, Exception, string>)))
+                    throw new InvalidOperationException($"Cannot add more than one formatter to host");
+                collection.AddSingleton(formatter);
             });
 
             return builder;
