@@ -32,3 +32,9 @@ steps:
     patchVersion: '$(Patch)'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Package'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: Discord.Net.Hosting.Artifacts
+  displayName: 'Publish Artifacts'
