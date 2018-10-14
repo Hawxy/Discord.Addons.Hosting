@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Hawxy</Authors>
     <Description>Discord.Net hosting with IHostedService and Microsoft.Extensions.Hosting</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
