@@ -30,4 +30,5 @@ steps:
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
+    packDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Package'
