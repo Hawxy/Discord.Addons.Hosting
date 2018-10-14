@@ -13,7 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://i.imgur.com/m7Uypgf.png</PackageIconUrl>
     <Copyright>Hawxy 2018</Copyright>
-    <PackageTags>Discord.Net,Microsoft.Extensions.Hosting</PackageTags>
+    <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
