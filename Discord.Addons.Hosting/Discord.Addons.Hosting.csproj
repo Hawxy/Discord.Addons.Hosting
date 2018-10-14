@@ -11,6 +11,7 @@
     <PackageProjectUrl>https://github.com/Hawxy/Discord.Addons.Hosting</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://i.imgur.com/m7Uypgf.png</PackageIconUrl>
     <Copyright>Hawxy 2018</Copyright>
     <PackageTags>Discord.Net,Microsoft.Extensions.Hosting</PackageTags>
   </PropertyGroup>
