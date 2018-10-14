@@ -10,6 +10,7 @@
     <PackageLicenseUrl>https://github.com/Hawxy/Discord.Addons.Hosting/blob/azure-pipelines/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Hawxy/Discord.Addons.Hosting</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <Copyright>Hawxy 2018</Copyright>
     <PackageTags>Discord.Net,Microsoft.Extensions.Hosting</PackageTags>
   </PropertyGroup>
