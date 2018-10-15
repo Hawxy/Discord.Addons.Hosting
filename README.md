@@ -2,9 +2,10 @@
 [![Build Status](https://dev.azure.com/GithubHawxy/Discord.Addons.Hosting/_apis/build/status/Hawxy.Discord.Addons.Hosting)](https://dev.azure.com/GithubHawxy/Discord.Addons.Hosting/_build/latest?definitionId=2)
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 
+[Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
+This package provides extensions to IHostBuilder that will run a Discord.Net socket/sharded client as a IHostedService. 
 
-Discord.Net hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
-This package provides extensions to IHostBuilder that will run a Discord.Net socket client via IHostedService. 
+Discord.Net 2.0 build 1000 or later is required.
 
 ```csharp
 var builder = new HostBuilder()               
