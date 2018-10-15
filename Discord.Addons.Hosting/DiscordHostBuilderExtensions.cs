@@ -40,7 +40,7 @@ namespace Discord.Addons.Hosting
         /// <param name="config">The delegate for configuring the <see cref="DiscordClientHandler{T}" /> that will be used to construct the discord client.</param>
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
-        /// <exception cref="InvalidOperationException">Thrown if client is already logged in</exception>
+        /// <exception cref="InvalidOperationException">Thrown client is already added or logged in</exception>
         public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: BaseSocketClient, new()
         {
             if(config == null)
@@ -105,7 +105,7 @@ namespace Discord.Addons.Hosting
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(CommandService)))
-                    throw new InvalidOperationException($"Cannot add more than one {typeof(CommandService)} to host");
+                    throw new InvalidOperationException($"Cannot add more than one CommandService to host");
 
                 var csc = new CommandServiceConfig();
                 config(context, csc);
@@ -116,7 +116,6 @@ namespace Discord.Addons.Hosting
 
             return builder;
         }
-
 
         /// <summary>
         /// Provides a custom format to the <see cref="LogAdapter"/> used by the Client and CommandService. />

@@ -3,9 +3,6 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
 
 steps:
 - task: DotNetCoreCLI@2
