@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Hosting;
+using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -62,7 +63,7 @@ namespace SampleBotSimple
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
-                await host.RunAsync();
+                await host.WithReliability<DiscordSocketClient>().RunAsync();
             }
 
         }
