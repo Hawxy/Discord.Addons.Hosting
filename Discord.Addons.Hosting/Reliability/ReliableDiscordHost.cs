@@ -23,7 +23,7 @@ namespace Discord.Addons.Hosting.Reliability
             _discord = discord;
             _logger = logger;
             _host = host;
-            _logger.LogInformation("Using Discord.Net Reliability service - Host will automatically restart after a 30 second disconnect");
+            _logger.LogInformation("Using Discord.Net Reliability service - Host will attempt to restart after a 30 second disconnect");
 
             _discord.Connected += ConnectedAsync;
             _discord.Disconnected += DisconnectedAsync;
@@ -48,7 +48,6 @@ namespace Discord.Addons.Hosting.Reliability
             {
                 _logger.LogDebug("Timeout expired, continuing to check client state...");
                 await CheckStateAsync();
-                _logger.LogDebug("Discord client state recovered");
             });
 
             return Task.CompletedTask;
@@ -57,7 +56,11 @@ namespace Discord.Addons.Hosting.Reliability
         private async Task CheckStateAsync()
         {
             // Client reconnected, no need to reset
-            if (_discord.ConnectionState == ConnectionState.Connected) return;
+            if (_discord.ConnectionState == ConnectionState.Connected)
+            {
+                _logger.LogInformation("Discord client recovered");
+                return;
+            }
 
             _logger.LogCritical("Client did not reconnect in time, restarting host");
             await RestartHost();

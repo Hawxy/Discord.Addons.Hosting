@@ -2,14 +2,17 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace SampleBotSimple
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
-        //will be injected
+        //Will be injected
         public ILogger<PublicModule> _logger { get; set; }
+        //You can inject the host too. This is not generally recommended, but useful if you want to shutdown the host via a command.
+        public IHost _host { get; set; }
 
         [Command("ping")]
         [Alias("pong", "hello")]
@@ -17,6 +20,13 @@ namespace SampleBotSimple
         {
             _logger.LogInformation($"User {Context.User.Username} used the ping command!");
             await ReplyAsync("pong!");
+        }
+
+        [Command("shutdown")]
+        public async Task Stop()
+        {
+            //Don't do this if you're using the reliability extension, as it'll just restart the bot.
+            _= _host.StopAsync();
         }
 
         [Command("log")]

@@ -1,9 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Addons.Hosting;
-using Discord.Addons.Hosting.Reliability;
-using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,12 +55,17 @@ namespace SampleBotSimple
                 })
                 .UseConsoleLifetime();
 
-            //Fire and forget. Will run until console is closed.
+            
             var host = builder.Build();
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
-                await host.WithReliability<DiscordSocketClient>().RunAsync();
+                //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
+                await host.RunAsync();
+                //If using reliability extension, use the below instead.
+                //await host.StartAsync();
+                //Console.ReadLine();
+
             }
 
         }
