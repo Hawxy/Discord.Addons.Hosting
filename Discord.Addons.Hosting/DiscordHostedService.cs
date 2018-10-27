@@ -70,7 +70,7 @@ namespace Discord.Addons.Hosting
         public void Dispose()
         {
             _logger.LogInformation("Disposing Discord.Net hosted service");
-           _client.Dispose();
+            _client.Dispose();
         }
     }
 }

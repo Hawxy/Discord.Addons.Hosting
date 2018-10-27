@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 // Based on ReliabilityService by Foxbot
 namespace Discord.Addons.Hosting.Reliability
 {
-    internal class ReliableDiscordHost
+    internal class ReliableDiscordHost : IDisposable
     {
         private static readonly TimeSpan _timeout = TimeSpan.FromSeconds(30);
 
@@ -42,7 +42,7 @@ namespace Discord.Addons.Hosting.Reliability
 
         private Task DisconnectedAsync(Exception _e)
         {
-            // Check the state after <timeout> to see if we reconnected
+             // Check the state after <timeout> to see if we reconnected
             _logger.LogInformation("Discord client disconnected, starting timeout task...");
             _ = Task.Delay(_timeout, _cts.Token).ContinueWith(async _ =>
             {
@@ -71,6 +71,28 @@ namespace Discord.Addons.Hosting.Reliability
             await _host.StopAsync();
             await _host.StartAsync();
         }
-          
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _logger.LogInformation("Disposing Reliability");
+                _discord.Connected -= ConnectedAsync;
+                _discord.Disconnected -= DisconnectedAsync;
+                _cts?.Cancel();
+                _cts?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~ReliableDiscordHost()
+        {
+            Dispose(false);
+        }
     }
 }

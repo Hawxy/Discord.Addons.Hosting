@@ -38,6 +38,6 @@ namespace Discord.Addons.Hosting
             => $"{message.Source}: {message.Exception?.ToString() ?? message.Message}";
 
         private static LogLevel GetLogLevel(LogSeverity severity)
-            => (LogLevel) (Math.Abs((int) severity - 5));
+            => (LogLevel) Math.Abs((int) severity - 5);
     }
 }
