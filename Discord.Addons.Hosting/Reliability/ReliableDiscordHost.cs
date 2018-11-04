@@ -31,7 +31,6 @@ namespace Discord.Addons.Hosting.Reliability
 
         private Task ConnectedAsync()
         {
-            // Cancel all previous state checks and reset the CancelToken - client is back online
             _logger.LogDebug("Discord client reconnected, resetting cancel token...");
             _cts.Cancel();
             _cts = new CancellationTokenSource();
@@ -42,7 +41,6 @@ namespace Discord.Addons.Hosting.Reliability
 
         private Task DisconnectedAsync(Exception _e)
         {
-             // Check the state after <timeout> to see if we reconnected
             _logger.LogInformation("Discord client disconnected, starting timeout task...");
             _ = Task.Delay(_timeout, _cts.Token).ContinueWith(async _ =>
             {
@@ -63,11 +61,6 @@ namespace Discord.Addons.Hosting.Reliability
             }
 
             _logger.LogCritical("Client did not reconnect in time, restarting host");
-            await RestartHost();
-        }
-
-        private async Task RestartHost()
-        {
             await _host.StopAsync();
             await _host.StartAsync();
         }
@@ -76,7 +69,7 @@ namespace Discord.Addons.Hosting.Reliability
         {
             if (disposing)
             {
-                _logger.LogInformation("Disposing Reliability");
+                _logger.LogInformation("Disposing Reliability Service");
                 _discord.Connected -= ConnectedAsync;
                 _discord.Disconnected -= DisconnectedAsync;
                 _cts?.Cancel();
