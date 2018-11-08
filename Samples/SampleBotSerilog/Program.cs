@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Hosting;
+using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -61,7 +62,8 @@ namespace SampleBotSerilog
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<CommandHandler>();
-                });
+                })
+                .UseConsoleLifetime();
 
             //Start and stop just by hitting enter
             //See https://github.com/aspnet/Hosting/tree/master/samples/GenericHostSample for other control patterns
@@ -69,18 +71,21 @@ namespace SampleBotSerilog
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
-                while (true)
-                {
-                    Log.Information("Starting!");
-                    await host.StartAsync();
-                    Log.Information("Started! Press <enter> to stop.");
-                    Console.ReadLine();
 
-                    Log.Information("Stopping!");
-                    await host.StopAsync();
-                    Log.Information("Stopped! Press <enter> to start");
-                    Console.ReadLine();
-                }
+                await host.RunReliablyAsync();
+                //while (true)
+                //{
+
+                //Log.Information("Starting!");
+                //await host.StartAsync();
+                //Log.Information("Started! Press <enter> to stop.");
+                //Console.ReadLine();
+
+                //Log.Information("Stopping!");
+                //await host.StopAsync();
+                //Log.Information("Stopped! Press <enter> to start");
+                //Console.ReadLine();
+                // }
             }
         }
     }
