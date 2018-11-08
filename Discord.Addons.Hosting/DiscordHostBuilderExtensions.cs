@@ -35,13 +35,13 @@ namespace Discord.Addons.Hosting
         /// <remarks>
         /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
         /// </remarks>
-        /// <typeparam name="T">The type of Discord.Net client. Type must inherit from <see cref="BaseSocketClient"/></typeparam>
+        /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
         /// <param name="config">The delegate for configuring the <see cref="DiscordClientHandler{T}" /> that will be used to construct the discord client.</param>
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
         /// <exception cref="InvalidOperationException">Thrown client is already added or logged in</exception>
-        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: BaseSocketClient, new()
+        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: DiscordSocketClient, new()
         {
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
@@ -62,8 +62,10 @@ namespace Discord.Addons.Hosting
                     throw new InvalidOperationException("Client logged in before host startup! Make sure you aren't calling LoginAsync manually");
                 
                 collection.AddSingleton(client);
+                if(typeof(T) != typeof(DiscordSocketClient))
+                    collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
                 collection.AddSingleton<LogAdapter>();
-                collection.AddHostedService<DiscordHostedService<T>>();
+                collection.AddHostedService<DiscordHostedService>();
             });
 
             return builder;

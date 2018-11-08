@@ -66,7 +66,7 @@ namespace SampleBotSimple
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
                 //If using reliability extension, use the below instead.
-                // await host.RunAndBlockReliablyAsync<DiscordSocketClient>();
+                // await host.RunAndBlockReliablyAsync();
             }
 
         }

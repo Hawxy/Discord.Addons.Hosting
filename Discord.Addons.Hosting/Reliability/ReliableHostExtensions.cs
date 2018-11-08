@@ -14,23 +14,21 @@ namespace Discord.Addons.Hosting.Reliability
         /// <summary>
         /// Adds the Reliability Service and Runs the host. This function will never return. Do not use in combination with <see cref="WithReliability{T}"/>
         /// </summary>
-        /// <typeparam name="T">The type of Discord.Net client being run. Type must inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="host">The host to configure.</param>
-        public static async Task RunAndBlockReliablyAsync<T>(this IHost host) where T : DiscordSocketClient, new()
+        public static async Task RunAndBlockReliablyAsync(this IHost host)
         {
-            host.WithReliability<T>();
+            host.WithReliability();
             await host.StartAsync();
             await Task.Delay(-1);
         }
         /// <summary>
         /// FOR ADVANCED USE ONLY: Manually adds the reliability service to the host. This may result in unexpected behaviour. For most situations you should use <see cref="RunAndBlockReliablyAsync{T}"/> instead
         /// </summary>
-        /// <typeparam name="T">The type of Discord.Net client being run. Type must inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="host">The host to configure.</param>
-        public static IHost WithReliability<T>(this IHost host) where T: DiscordSocketClient, new()
+        public static IHost WithReliability(this IHost host)
         {
             var lifetime = host.Services.GetService<IApplicationLifetime>();
-            var discord = host.Services.GetService<T>();
+            var discord = host.Services.GetService<DiscordSocketClient>();
             var logger = host.Services.GetService<ILogger<ReliableDiscordHost>>();
             var runner = new ReliableDiscordHost(discord, logger, host);
             lifetime.ApplicationStopping.Register(() => runner.Dispose());
