@@ -15,7 +15,7 @@ namespace SampleBotSimple
     class Program
     {
         //Requires C# 7.1 or later
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration(x =>
@@ -64,9 +64,9 @@ namespace SampleBotSimple
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
-                await host.RunAsync();
+                //await host.RunAsync();
                 //If using reliability extension, use the below instead.
-                // await host.RunAndBlockReliablyAsync();
+                await host.RunReliablyAsync();
             }
 
         }

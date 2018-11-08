@@ -14,7 +14,7 @@ namespace SampleBotSerilog
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             //Log is available everywhere, useful for places where it isn't practical to use ILogger injection
             Log.Logger = new LoggerConfiguration()
