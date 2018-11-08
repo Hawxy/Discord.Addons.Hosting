@@ -111,8 +111,7 @@ namespace Discord.Addons.Hosting
 
                 var csc = new CommandServiceConfig();
                 config(context, csc);
-                var service = new CommandService(csc);
-                collection.AddSingleton(service);
+                collection.AddSingleton(new CommandService(csc));
 
             });
 
