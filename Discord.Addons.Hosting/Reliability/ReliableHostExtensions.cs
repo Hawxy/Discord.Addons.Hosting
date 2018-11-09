@@ -44,10 +44,10 @@ namespace Discord.Addons.Hosting.Reliability
         }
 
         /// <summary>
-        /// Disposes the Reliability component and stops the host. For use when <see cref="RunReliablyAsync"/> is in use.
+        /// Disposes the reliability service and stops the host. For use when <see cref="RunReliablyAsync"/> is used to start the host..
         /// </summary>
         /// <param name="host">The host to configure.</param>
-        public static async Task QuitReliablyAsync(this IHost host)
+        public static async Task StopReliablyAsync(this IHost host)
         {
             if (_reliable == null)
                 throw new InvalidOperationException("Reliable host is null. Shutdown the host normally with StopAsync instead.");
