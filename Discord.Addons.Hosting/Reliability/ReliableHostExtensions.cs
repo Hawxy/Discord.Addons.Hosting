@@ -17,7 +17,7 @@ namespace Discord.Addons.Hosting.Reliability
         private static CancellationTokenSource _cts;
 
         /// <summary>
-        /// Adds the Reliability Service and Runs the host. This function will only return if <see cref="QuitReliablyAsync"/> is called elsewhere. Do not use in combination with <see cref="WithReliability"/>
+        /// Adds the Reliability Service and Runs the host. This function will only return if <see cref="StopReliablyAsync"/> is called elsewhere. Do not use in combination with <see cref="WithReliability"/>
         /// </summary>
         /// <param name="host">The host to configure.</param>
         public static async Task RunReliablyAsync(this IHost host)
@@ -25,13 +25,24 @@ namespace Discord.Addons.Hosting.Reliability
             host.WithReliability();
             await host.StartAsync();
             _cts = new CancellationTokenSource();
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) =>
+            {
+                _ = host.StopReliablyAsync();
+            };
+            Console.CancelKeyPress += (sender, e) => {
+                e.Cancel = true;
+                _ = host.StopReliablyAsync();
+            };
+
             await Task.Delay(-1, _cts.Token).ContinueWith(_ => { });
         }
+
         /// <summary>
         /// FOR ADVANCED USE ONLY: Directly adds the reliability service to the host. This may result in unexpected behaviour. For most situations you should use <see cref="RunReliablyAsync"/> instead
         /// </summary>
         /// <param name="host">The host to configure.</param>
-        public static IHost WithReliability(this IHost host)
+        internal static IHost WithReliability(this IHost host)
         {
             if(_reliable != null)
                 throw new InvalidOperationException("Cannot add Reliability Host, it already exists!");
@@ -52,6 +63,7 @@ namespace Discord.Addons.Hosting.Reliability
             if (_reliable == null)
                 throw new InvalidOperationException("Reliable host is null. Shutdown the host normally with StopAsync instead.");
             _reliable.Dispose();
+            _reliable = null;
             await host.StopAsync();
             _cts.Cancel();
             _cts.Dispose();

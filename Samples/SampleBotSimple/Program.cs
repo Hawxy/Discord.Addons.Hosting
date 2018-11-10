@@ -56,16 +56,17 @@ namespace SampleBotSimple
                     //Add any other services here
                     services.AddSingleton<CommandHandler>();
                 })
+                //This isn't needed if using the Reliability extension
                 .UseConsoleLifetime();
+                
 
-            
             var host = builder.Build();
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
-                //If you want the host to attempt a restart due to a client reconnect deadlock, use the Reliability service.
+                //If you want the host to attempt a restart due to a client reconnect deadlock, use the Reliability extension.
                 //await host.RunReliablyAsync();
             }
 
