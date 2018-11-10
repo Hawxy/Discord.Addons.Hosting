@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 
 [Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
-This package provides extensions to IHostBuilder that will run a Discord.Net socket/sharded client as a IHostedService. 
+This package primarily provides extensions to a .NET Generic Host (IHostBuilder) that will run a Discord.Net socket/sharded client as a controllable IHostedService. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
 
 Discord.Net 2.0 build 1000 or later is required.
 
