@@ -12,7 +12,7 @@ namespace SampleBotSimple
     {
         //Will be injected
         public ILogger<PublicModule> _logger { get; set; }
-        //You can inject the host too. This is not generally recommended, but useful if you want to shutdown the host via a command.
+        //You can inject the host too. This is useful if you want to shutdown the host via a command, but be careful with it.
         public IHost _host { get; set; }
 
         [Command("ping")]
