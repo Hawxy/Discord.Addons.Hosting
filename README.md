@@ -39,4 +39,29 @@ using (host)
 }
 ```
 
-See [samples](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples) for working examples
+### Basic Usage
+
+1. Create a .NET Core application (or retrofit your existing one)
+2. Add the following NuGet packages (at the absolute minimum):
+
+   ```Discord.Addons.Hosting```
+   ```Microsoft.Extensions.Hosting```
+   ```Microsoft.Extensions.Configuration.Json```
+   
+3. Create and start your application using a HostBuilder as shown in the [examples](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples)
+
+### Serilog
+
+Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
+
+See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage
+
+### Reliability 
+
+Discord.Net can occasionally fail to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and does not guarantee that the client will *always* recover.
+
+To use the reliability extensions, start the host with ```await host.RunReliablyAsync()```.
+
+To shutdown the host, it's recommended to add a shutdown command to your bot and call ```host.StopReliablyAsync()```.
+
+This behaviour is similar to the usage of ```RunAsync()``` and ```StopAsync()```
