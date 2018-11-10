@@ -72,20 +72,18 @@ namespace SampleBotSerilog
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
 
-                await host.RunReliablyAsync();
-                //while (true)
-                //{
+                while (true)
+                {
+                    Log.Information("Starting!");
+                    await host.StartAsync();
+                    Log.Information("Started! Press <enter> to stop.");
+                    Console.ReadLine();
 
-                //Log.Information("Starting!");
-                //await host.StartAsync();
-                //Log.Information("Started! Press <enter> to stop.");
-                //Console.ReadLine();
-
-                //Log.Information("Stopping!");
-                //await host.StopAsync();
-                //Log.Information("Stopped! Press <enter> to start");
-                //Console.ReadLine();
-                // }
+                    Log.Information("Stopping!");
+                    await host.StopAsync();
+                    Log.Information("Stopped! Press <enter> to start");
+                    Console.ReadLine();
+                }
             }
         }
     }

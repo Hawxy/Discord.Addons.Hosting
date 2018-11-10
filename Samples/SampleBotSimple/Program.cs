@@ -64,9 +64,9 @@ namespace SampleBotSimple
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
-                //await host.RunAsync();
-                //If using reliability extension, use the below instead.
-                await host.RunReliablyAsync();
+                await host.RunAsync();
+                //If you want the host to attempt a restart due to a client reconnect deadlock, use the Reliability service.
+                //await host.RunReliablyAsync();
             }
 
         }

@@ -25,7 +25,7 @@ namespace Discord.Addons.Hosting.Reliability
             host.WithReliability();
             await host.StartAsync();
             _cts = new CancellationTokenSource();
-            await Task.Delay(-1, _cts.Token);
+            await Task.Delay(-1, _cts.Token).ContinueWith(_ => { });
         }
         /// <summary>
         /// FOR ADVANCED USE ONLY: Directly adds the reliability service to the host. This may result in unexpected behaviour. For most situations you should use <see cref="RunReliablyAsync"/> instead
@@ -44,7 +44,7 @@ namespace Discord.Addons.Hosting.Reliability
         }
 
         /// <summary>
-        /// Disposes the reliability service and stops the host. For use when <see cref="RunReliablyAsync"/> is used to start the host..
+        /// Disposes the reliability service and stops the host. For use when <see cref="RunReliablyAsync"/> is used to start the host.
         /// </summary>
         /// <param name="host">The host to configure.</param>
         public static async Task StopReliablyAsync(this IHost host)
