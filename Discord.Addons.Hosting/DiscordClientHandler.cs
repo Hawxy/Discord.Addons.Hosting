@@ -22,9 +22,9 @@ namespace Discord.Addons.Hosting
 {
     /// <summary>
     /// Simple handler to manage client creation
-    /// <typeparam name="T">The type of Discord.Net client. Type must inherit from <see cref="BaseSocketClient"/></typeparam>
+    /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
     /// </summary>
-    public class DiscordClientHandler<T> where T: BaseSocketClient, new()
+    public class DiscordClientHandler<T> where T: DiscordSocketClient
     {
         private T _client;
 
@@ -45,11 +45,11 @@ namespace Discord.Addons.Hosting
         /// </summary>
         /// <param name="config">The Discord client configuration object. Ensure the type is compatible with the client type <typeparamref name="T"/></param>
         /// <exception cref="InvalidOperationException">Thrown if client initialized more than once</exception>
-        public void UseDiscordConfiguration<Y>(Y config) where Y : DiscordConfig
+        public void UseDiscordConfiguration<Y>(Y config) where Y : DiscordSocketConfig
         {
             if(_client != null)
                 throw new InvalidOperationException("Client can only be initialized once!");
-            //has performance issues, but does it matter if it's only called once?
+      
             _client = (T)Activator.CreateInstance(typeof(T), config);
         }
 

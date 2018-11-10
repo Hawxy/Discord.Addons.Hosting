@@ -1,7 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Addons.Hosting;
+using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,7 @@ namespace SampleBotSimple
     class Program
     {
         //Requires C# 7.1 or later
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration(x =>
@@ -55,14 +56,18 @@ namespace SampleBotSimple
                     //Add any other services here
                     services.AddSingleton<CommandHandler>();
                 })
+                //This isn't needed if using the Reliability extension
                 .UseConsoleLifetime();
+                
 
-            //Fire and forget. Will run until console is closed.
             var host = builder.Build();
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
+                //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
+                //If you want the host to attempt a restart due to a client reconnect deadlock, use the Reliability extension.
+                //await host.RunReliablyAsync();
             }
 
         }

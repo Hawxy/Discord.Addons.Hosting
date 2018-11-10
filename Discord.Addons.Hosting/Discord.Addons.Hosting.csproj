@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.1.0</Version>
     <Authors>Hawxy</Authors>
-    <Description>Discord.Net hosting with IHostedService and Microsoft.Extensions.Hosting</Description>
+    <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Hawxy/Discord.Addons.Hosting/blob/azure-pipelines/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/Hawxy/Discord.Addons.Hosting/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Hawxy/Discord.Addons.Hosting</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Hosting;
+using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +15,7 @@ namespace SampleBotSerilog
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             //Log is available everywhere, useful for places where it isn't practical to use ILogger injection
             Log.Logger = new LoggerConfiguration()
@@ -61,7 +62,8 @@ namespace SampleBotSerilog
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<CommandHandler>();
-                });
+                })
+                .UseConsoleLifetime();
 
             //Start and stop just by hitting enter
             //See https://github.com/aspnet/Hosting/tree/master/samples/GenericHostSample for other control patterns
@@ -69,6 +71,7 @@ namespace SampleBotSerilog
             using (host)
             {
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
+
                 while (true)
                 {
                     Log.Information("Starting!");

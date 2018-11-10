@@ -27,13 +27,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Discord.Addons.Hosting
 {
-    internal class DiscordHostedService<T> : IHostedService, IDisposable where T: BaseSocketClient, new()
+    internal class DiscordHostedService : IHostedService, IDisposable
     {
-        private readonly ILogger<DiscordHostedService<T>> _logger;
-        private readonly T _client;
+        private readonly ILogger<DiscordHostedService> _logger;
+        private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService<T>> logger, T client, IConfiguration config, IServiceProvider services)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, DiscordSocketClient client, IConfiguration config, IServiceProvider services)
         {
             _logger = logger;
             _client = client;
@@ -42,12 +42,18 @@ namespace Discord.Addons.Hosting
             var adapter = services.GetRequiredService<LogAdapter>();
             //workaround for correct logging category
             adapter.UseLogger(logger);
+
+            //In cases where the constructor is called multiple times
+            client.Log -= adapter.Log;
             client.Log += adapter.Log;
             var cs = services.GetService<CommandService>();
             if (cs != null)
+            {
+                cs.Log -= adapter.Log;
                 cs.Log += adapter.Log;
+            }
+                
         }
-
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is starting");
@@ -64,7 +70,7 @@ namespace Discord.Addons.Hosting
         public void Dispose()
         {
             _logger.LogInformation("Disposing Discord.Net hosted service");
-           _client.Dispose();
+            _client.Dispose();
         }
     }
 }
