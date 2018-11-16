@@ -35,7 +35,7 @@ namespace Discord.Addons.Hosting
         }
 
         private string DefaultFormatter(LogMessage message, Exception _)
-            => $"{message.Source}: {message.Exception?.ToString() ?? message.Message}";
+            => $"{message.Source}: {message.Message}";
 
         private static LogLevel GetLogLevel(LogSeverity severity)
             => (LogLevel) Math.Abs((int) severity - 5);
