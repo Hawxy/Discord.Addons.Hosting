@@ -21,7 +21,8 @@ namespace SampleBotSimple
             _client = client;
             _commandService = commandService;
             _config = config;
-            client.MessageReceived += HandleMessage;
+            _client.MessageReceived += HandleMessage;
+            _commandService.CommandExecuted += CommandExecutedAsync;
         }
         public async Task InitializeAsync()
         {
@@ -37,11 +38,15 @@ namespace SampleBotSimple
             if (!message.HasStringPrefix(_config["Prefix"], ref argPos) && !message.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
 
             var context = new SocketCommandContext(_client, message);
-            var result = await _commandService.ExecuteAsync(context, argPos, _provider);
+            await _commandService.ExecuteAsync(context, argPos, _provider);
+        }
 
-            if (result.Error.HasValue &&
-                result.Error.Value != CommandError.UnknownCommand)
-                await context.Channel.SendMessageAsync(result.ToString());
+        public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
+        {
+            if (!command.IsSpecified || result.IsSuccess)
+                return;
+            
+            await context.Channel.SendMessageAsync($"Error: {result}");
         }
     }
 }
