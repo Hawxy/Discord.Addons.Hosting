@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -33,24 +32,23 @@ namespace Discord.Addons.Hosting
         private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, DiscordSocketClient client, IConfiguration config, IServiceProvider services)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IConfiguration config, LogAdapter adapter, DiscordSocketClient client, CommandService commandService = null)
         {
             _logger = logger;
-            _client = client;
             _config = config;
+            _client = client;
 
-            var adapter = services.GetRequiredService<LogAdapter>();
             //workaround for correct logging category
             adapter.UseLogger(logger);
 
             //In cases where the constructor is called multiple times
             client.Log -= adapter.Log;
             client.Log += adapter.Log;
-            var cs = services.GetService<CommandService>();
-            if (cs != null)
+          
+            if (commandService != null)
             {
-                cs.Log -= adapter.Log;
-                cs.Log += adapter.Log;
+                commandService.Log -= adapter.Log;
+                commandService.Log += adapter.Log;
             }
                 
         }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 
 namespace SampleBotSerilog
 {
@@ -20,6 +21,7 @@ namespace SampleBotSerilog
             //Log is available everywhere, useful for places where it isn't practical to use ILogger injection
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                 .WriteTo.Console()
                 .CreateLogger();
 
