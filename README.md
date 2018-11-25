@@ -48,7 +48,13 @@ using (host)
    ```Microsoft.Extensions.Hosting```
    ```Microsoft.Extensions.Configuration.Json```
    
-3. Create and start your application using a HostBuilder as shown in the [examples](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples)
+3. Create and start your application using a HostBuilder as shown above and in the examples linked below
+
+### Examples
+
+Fully working examples are available [here](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples)
+
+If you want something more advanced, one of my bots CitizenEnforcer uses this extension. You can find it [here](https://github.com/Hawxy/CitizenEnforcer)
 
 ### Serilog
 
