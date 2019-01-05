@@ -65,7 +65,7 @@ namespace Discord.Addons.Hosting
                 if(typeof(T) != typeof(DiscordSocketClient))
                     collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
                 collection.AddSingleton<LogAdapter>();
-                collection.AddHostedService<DiscordHostedService>();
+                collection.AddSingleton<DiscordHostedService>();
             });
 
             return builder;
