@@ -41,13 +41,10 @@ namespace Discord.Addons.Hosting
             //workaround for correct logging category
             adapter.UseLogger(logger);
 
-            //In cases where the constructor is called multiple times
-            client.Log -= adapter.Log;
             client.Log += adapter.Log;
           
             if (commandService != null)
             {
-                commandService.Log -= adapter.Log;
                 commandService.Log += adapter.Log;
             }
                 
