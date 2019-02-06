@@ -9,8 +9,9 @@ namespace Discord.Addons.Hosting
         private ILogger _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
-        public LogAdapter(Func<LogMessage, Exception, string> formatter = null)
+        public LogAdapter(ILoggerFactory loggerFactory, Func<LogMessage, Exception, string> formatter = null)
         {
+            _logger = loggerFactory.CreateLogger("Discord Client");
             _formatter = formatter ?? DefaultFormatter;
         }
 

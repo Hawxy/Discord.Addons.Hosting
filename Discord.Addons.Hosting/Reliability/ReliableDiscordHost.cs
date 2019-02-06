@@ -31,7 +31,6 @@ namespace Discord.Addons.Hosting.Reliability
 
         private Task ConnectedAsync()
         {
-            _logger.LogDebug("Discord client reconnected, resetting cancel token...");
             _cts.Cancel();
             _cts = new CancellationTokenSource();
             _logger.LogDebug("Discord client reconnected, cancel token reset.");
@@ -60,9 +59,12 @@ namespace Discord.Addons.Hosting.Reliability
                 return;
             }
 
-            _logger.LogCritical("Client did not reconnect in time, restarting host");
-            await _host.StopAsync();
-            await _host.StartAsync();
+            _logger.LogCritical("Client did not reconnect in time, attempting to restart host...");
+            await _host.StopAsync().ContinueWith(async _ =>
+            {
+                await _host.StartAsync();
+            });
+           
         }
 
         private void Dispose(bool disposing)
