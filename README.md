@@ -66,7 +66,7 @@ See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/m
 
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
-If you're finding that this isn't enough time, you can modify the shutdown timeout via the [relevant host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#shutdown-timeout).
+If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#shutdown-timeout).
 
 ### Reliability 
 
