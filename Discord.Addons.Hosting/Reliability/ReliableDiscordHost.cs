@@ -67,27 +67,13 @@ namespace Discord.Addons.Hosting.Reliability
            
         }
 
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _logger.LogInformation("Disposing Reliability Service");
-                _discord.Connected -= ConnectedAsync;
-                _discord.Disconnected -= DisconnectedAsync;
-                _cts?.Cancel();
-                _cts?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ReliableDiscordHost()
-        {
-            Dispose(false);
+       public void Dispose()
+       {
+           _logger.LogInformation("Disposing Reliability Service");
+           _discord.Connected -= ConnectedAsync;
+           _discord.Disconnected -= DisconnectedAsync;
+           _cts?.Cancel();
+           _cts?.Dispose();
         }
     }
 }

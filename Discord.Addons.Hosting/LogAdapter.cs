@@ -14,8 +14,6 @@ namespace Discord.Addons.Hosting
             _logger = loggerFactory.CreateLogger("Discord Client");
             _formatter = formatter ?? DefaultFormatter;
         }
-
-        public void UseLogger(ILogger logger) => _logger = logger;
         
         public Task Log(LogMessage message)
         {
