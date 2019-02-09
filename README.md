@@ -62,9 +62,15 @@ Serilog should be added to the host with ```Serilog.Extensions.Hosting```.
 
 See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage
 
+### Shutdown
+
+When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
+
+If you're finding that this isn't enough time, you can modify the shutdown timeout via the [relevant host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#shutdown-timeout).
+
 ### Reliability 
 
-Discord.Net can occasionally fail to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and does not guarantee that the client will *always* recover.
+Discord.Net can occasionally fail to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and does not guarantee that the client will *always* recover. Please note that this feature is also affected by the shutdown timeout set above.
 
 To use the reliability extensions, start the host with ```await host.RunReliablyAsync()```.
 
