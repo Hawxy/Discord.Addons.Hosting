@@ -14,6 +14,7 @@
     <PackageIconUrl>https://i.imgur.com/ofsSSut.png</PackageIconUrl>
     <Copyright>Hawxy 2018-2019</Copyright>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

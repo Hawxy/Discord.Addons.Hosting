@@ -82,7 +82,7 @@ namespace Discord.Addons.Hosting
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(CommandService)))
-                    throw new InvalidOperationException($"Cannot add more than one CommandService to host");
+                    throw new InvalidOperationException("Cannot add more than one CommandService to host");
                 collection.AddSingleton<CommandService>();
             });
             return builder;
@@ -107,7 +107,7 @@ namespace Discord.Addons.Hosting
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(CommandService)))
-                    throw new InvalidOperationException($"Cannot add more than one CommandService to host");
+                    throw new InvalidOperationException("Cannot add more than one CommandService to host");
 
                 var csc = new CommandServiceConfig();
                 config(context, csc);
@@ -137,7 +137,7 @@ namespace Discord.Addons.Hosting
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(Func<LogMessage, Exception, string>)))
-                    throw new InvalidOperationException($"Cannot add more than one formatter to host");
+                    throw new InvalidOperationException("Cannot add more than one formatter to host");
                 collection.AddSingleton(formatter);
             });
 

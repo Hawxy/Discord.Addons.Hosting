@@ -6,7 +6,7 @@ namespace Discord.Addons.Hosting
 {
     internal class LogAdapter
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
         public LogAdapter(ILoggerFactory loggerFactory, Func<LogMessage, Exception, string> formatter = null)
@@ -17,7 +17,7 @@ namespace Discord.Addons.Hosting
         
         public Task Log(LogMessage message)
         {
-            _logger.Log(GetLogLevel(message.Severity), default(EventId), message, message.Exception, _formatter);
+            _logger.Log(GetLogLevel(message.Severity), default, message, message.Exception, _formatter);
             return Task.CompletedTask;
         }
 
