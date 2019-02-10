@@ -3,17 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>1.2.1</Version>
+    <Version>1.3.0</Version>
     <Authors>Hawxy</Authors>
     <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Hawxy/Discord.Addons.Hosting/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Hawxy/Discord.Addons.Hosting</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://i.imgur.com/ofsSSut.png</PackageIconUrl>
-    <Copyright>Hawxy 2018</Copyright>
+    <Copyright>Hawxy 2018-2019</Copyright>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

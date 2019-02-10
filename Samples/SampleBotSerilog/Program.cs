@@ -68,7 +68,7 @@ namespace SampleBotSerilog
                 .UseConsoleLifetime();
 
             //Start and stop just by hitting enter
-            //See https://github.com/aspnet/Hosting/tree/master/samples/GenericHostSample for other control patterns
+            //See https://github.com/aspnet/Extensions/tree/master/src/Hosting/samples/GenericHostSample for other control patterns
             var host = builder.Build();
             using (host)
             {

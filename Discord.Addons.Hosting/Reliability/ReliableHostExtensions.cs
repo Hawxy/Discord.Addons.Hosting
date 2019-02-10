@@ -17,7 +17,7 @@ namespace Discord.Addons.Hosting.Reliability
         private static CancellationTokenSource _cts;
 
         /// <summary>
-        /// Adds the Reliability Service and Runs the host. This function will only return if <see cref="StopReliablyAsync"/> is called elsewhere. Do not use in combination with <see cref="WithReliability"/>
+        /// Adds the Reliability Service and Runs the host. This function will only return if <see cref="StopReliablyAsync"/> is called elsewhere.
         /// </summary>
         /// <param name="host">The host to configure.</param>
         public static async Task RunReliablyAsync(this IHost host)
@@ -64,9 +64,11 @@ namespace Discord.Addons.Hosting.Reliability
                 throw new InvalidOperationException("Reliable host is null. Shutdown the host normally with StopAsync instead.");
             _reliable.Dispose();
             _reliable = null;
-            await host.StopAsync();
-            _cts.Cancel();
-            _cts.Dispose();
+            await host.StopAsync().ContinueWith(_ =>
+            {
+                _cts.Cancel();
+                _cts.Dispose();
+            });
         }
     }
 }

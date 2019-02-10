@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Discord.Addons.Hosting;
 using Discord.Addons.Hosting.Reliability;
@@ -32,7 +31,7 @@ namespace SampleBotSimple
                 {
                     x.SetMinimumLevel(LogLevel.Information);
                     //This works but isn't very pretty. I would highly suggest using Serilog or some other third-party logger
-                    //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.1#built-in-logging-providers for more logging options
+                    //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.2#built-in-logging-providers for more logging options
                     x.AddConsole();
 
                     //Inject ILogger in any services/modules that require logging
@@ -66,10 +65,9 @@ namespace SampleBotSimple
                 await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
-                //If you want the host to attempt a restart due to a client reconnect deadlock, use the Reliability extension.
+                //If you want the host to attempt a restart when the client fails to reconnect, use the Reliability extension.
                 //await host.RunReliablyAsync();
             }
-
         }
     }
 }

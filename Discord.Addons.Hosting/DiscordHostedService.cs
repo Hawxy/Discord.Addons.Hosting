@@ -38,16 +38,11 @@ namespace Discord.Addons.Hosting
             _config = config;
             _client = client;
 
-            //workaround for correct logging category
-            adapter.UseLogger(logger);
-
             client.Log += adapter.Log;
           
             if (commandService != null)
-            {
                 commandService.Log += adapter.Log;
-            }
-                
+            
         }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
@@ -59,7 +54,9 @@ namespace Discord.Addons.Hosting
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is stopping");
-            await _client.StopAsync();
+            var task = _client.StopAsync();
+            await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
+            if (cancellationToken.IsCancellationRequested) _logger.LogCritical("Discord.NET client could not be stopped within the given timeout and may have permanently deadlocked");
         }
 
         public void Dispose()
