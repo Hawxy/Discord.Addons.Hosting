@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Discord.Addons.Hosting;
 using Discord.Addons.Hosting.Reliability;
