@@ -20,7 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net.Commands" Version="2.0.1" />
     <PackageReference Include="Discord.Net.WebSocket" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0-preview3.19153.1" />
   </ItemGroup>
 
 </Project>

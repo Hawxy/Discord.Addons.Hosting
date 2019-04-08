@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -22,19 +22,9 @@ namespace Discord.Addons.Hosting.Reliability
         /// <param name="host">The host to configure.</param>
         public static async Task RunReliablyAsync(this IHost host)
         {
-            host.WithReliability();
-            await host.StartAsync();
+            await host.WithReliability().StartAsync();
             _cts = new CancellationTokenSource();
-
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) =>
-            {
-                _ = host.StopReliablyAsync();
-            };
-            Console.CancelKeyPress += (sender, e) => {
-                e.Cancel = true;
-                _ = host.StopReliablyAsync();
-            };
-
+            
             await Task.Delay(-1, _cts.Token).ContinueWith(_ => { });
         }
 
@@ -49,6 +39,8 @@ namespace Discord.Addons.Hosting.Reliability
 
             var discord = host.Services.GetRequiredService<DiscordSocketClient>();
             var logger = host.Services.GetRequiredService<ILogger<ReliableDiscordHost>>();
+            var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
+            lifetime.ApplicationStopping.Register(() => _ = host.StopReliablyAsync());
             _reliable = new ReliableDiscordHost(discord, logger, host);
             
             return host;
@@ -64,11 +56,11 @@ namespace Discord.Addons.Hosting.Reliability
                 throw new InvalidOperationException("Reliable host is null. Shutdown the host normally with StopAsync instead.");
             _reliable.Dispose();
             _reliable = null;
-            await host.StopAsync().ContinueWith(_ =>
+            await host.StopAsync().ContinueWith(_ => 
             {
                 _cts.Cancel();
                 _cts.Dispose();
             });
         }
-    }
+     }
 }

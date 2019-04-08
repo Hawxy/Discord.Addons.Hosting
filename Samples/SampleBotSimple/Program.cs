@@ -55,7 +55,6 @@ namespace SampleBotSimple
                     //Add any other services here
                     services.AddSingleton<CommandHandler>();
                 })
-                //This isn't needed if using the Reliability extension
                 .UseConsoleLifetime();
                 
 
