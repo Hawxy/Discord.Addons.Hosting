@@ -48,8 +48,8 @@ namespace Discord.Addons.Hosting
 
             builder.ConfigureServices((context, collection) =>
             {
-                if (collection.Any(x => x.ServiceType == typeof(T)))
-                    throw new InvalidOperationException($"Cannot add more than one {typeof(T)} to host");
+                if (collection.Any(x => x.ServiceType == typeof(DiscordSocketClient)))
+                    throw new InvalidOperationException($"Cannot add more than one Discord Client to host");
 
                 var token = context.Configuration["token"];
                 TokenUtils.ValidateToken(TokenType.Bot, token);

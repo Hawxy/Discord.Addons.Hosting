@@ -6,7 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 
-namespace SampleBotSerilog
+namespace Sample.Serilog
 {
     public class CommandHandler
     {

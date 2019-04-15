@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SampleBotSimple
+namespace Sample.Simple
 {
     class Program
     {
@@ -56,7 +56,7 @@ namespace SampleBotSimple
                     services.AddSingleton<CommandHandler>();
                 })
                 .UseConsoleLifetime();
-                
+
 
             var host = builder.Build();
             using (host)

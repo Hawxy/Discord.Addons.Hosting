@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace SampleBotSerilog
+namespace Sample.Serilog
 {
     class Program
     {

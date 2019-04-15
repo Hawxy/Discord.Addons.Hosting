@@ -6,7 +6,7 @@ using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SampleBotSimple
+namespace Sample.Simple
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
@@ -47,6 +47,6 @@ namespace SampleBotSimple
         }
 
         private static LogLevel GetLogLevel(LogSeverity severity)
-            => (LogLevel)(Math.Abs((int)severity - 5));
+            => (LogLevel)Math.Abs((int)severity - 5);
     }
 }
