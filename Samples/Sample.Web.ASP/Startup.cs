@@ -46,12 +46,14 @@ namespace Sample.Web.ASP
 
             app.UseHttpsRedirection();
 
-            app.UseRouting(routes =>
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(routes =>
             {
                 routes.MapControllers();
             });
-
-            app.UseAuthorization();
         }
     }
 }
