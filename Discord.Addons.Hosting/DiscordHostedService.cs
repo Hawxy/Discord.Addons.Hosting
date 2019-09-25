@@ -26,7 +26,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Discord.Addons.Hosting
 {
-    internal class DiscordHostedService : IHostedService, IDisposable
+    internal class DiscordHostedService : IHostedService
     {
         private readonly ILogger<DiscordHostedService> _logger;
         private readonly DiscordSocketClient _client;
@@ -57,12 +57,6 @@ namespace Discord.Addons.Hosting
             var task = _client.StopAsync();
             await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
             if (cancellationToken.IsCancellationRequested) _logger.LogCritical("Discord.NET client could not be stopped within the given timeout and may have permanently deadlocked");
-        }
-
-        public void Dispose()
-        {
-            _logger.LogInformation("Disposing Discord.Net hosted service");
-            _client.Dispose();
         }
     }
 }

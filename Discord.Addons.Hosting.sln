@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Serilog", "Samples\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Simple", "Samples\SampleBotSimple\Sample.Simple.csproj", "{E65C387F-9D99-4257-A458-1F6D5A4D80F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Web", "Samples\Sample.Web.ASP\Sample.Web.csproj", "{0D980196-632B-4F10-82CF-BFDEECEDA68C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{E65C387F-9D99-4257-A458-1F6D5A4D80F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E65C387F-9D99-4257-A458-1F6D5A4D80F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E65C387F-9D99-4257-A458-1F6D5A4D80F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D980196-632B-4F10-82CF-BFDEECEDA68C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D980196-632B-4F10-82CF-BFDEECEDA68C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D980196-632B-4F10-82CF-BFDEECEDA68C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D980196-632B-4F10-82CF-BFDEECEDA68C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
