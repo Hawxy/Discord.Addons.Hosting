@@ -5,7 +5,7 @@
 [Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
 This package primarily provides extensions to a .NET Generic Host (IHostBuilder) that will run a Discord.Net socket/sharded client as a controllable IHostedService. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
 
-Discord.Net 2.0.1 or later is required.
+Discord.Net 2.1.1+ & .NET Core 2.0+ is required.
 
 ```csharp
 var builder = new HostBuilder()               

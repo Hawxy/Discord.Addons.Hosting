@@ -69,15 +69,11 @@ namespace Discord.Addons.Hosting.Reliability
 
        public void Dispose()
        {
-           if (Disposed) return;
            _logger.LogInformation("Disposing Reliability Service");
            _discord.Connected -= ConnectedAsync;
            _discord.Disconnected -= DisconnectedAsync;
            _cts?.Cancel();
            _cts?.Dispose();
-           Disposed = true;
        }
-
-       public bool Disposed { get; private set; }
     }
 }

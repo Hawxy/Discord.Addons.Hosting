@@ -32,23 +32,22 @@ namespace Discord.Addons.Hosting
         private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, IConfiguration config, LogAdapter adapter, DiscordSocketClient client, CommandService commandService = null)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IConfiguration config, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
         {
             _logger = logger;
             _config = config;
             _client = client;
-
-            client.Log += adapter.Log;
-          
-            if (commandService != null)
-                commandService.Log += adapter.Log;
-            
+            _client.Log += adapter.Log;
         }
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is starting");
             await _client.LoginAsync(TokenType.Bot, _config["token"]);
-            await _client.StartAsync();
+            var task = _client.StartAsync();
+            await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
+            if(cancellationToken.IsCancellationRequested) _logger.LogWarning("Startup has been aborted, exiting...");
+
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

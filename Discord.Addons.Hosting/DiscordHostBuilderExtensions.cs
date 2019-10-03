@@ -41,7 +41,7 @@ namespace Discord.Addons.Hosting
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
         /// <exception cref="InvalidOperationException">Thrown client is already added or logged in</exception>
-        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: DiscordSocketClient, new()
+        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: DiscordSocketClient
         {
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
@@ -64,7 +64,7 @@ namespace Discord.Addons.Hosting
                 collection.AddSingleton(client);
                 if(typeof(T) != typeof(DiscordSocketClient))
                     collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
-                collection.AddSingleton<LogAdapter>();
+                collection.AddSingleton(typeof(LogAdapter<>));
                 collection.AddHostedService<DiscordHostedService>();
             });
 
@@ -84,6 +84,7 @@ namespace Discord.Addons.Hosting
                 if (collection.Any(x => x.ServiceType == typeof(CommandService)))
                     throw new InvalidOperationException("Cannot add more than one CommandService to host");
                 collection.AddSingleton<CommandService>();
+                collection.AddHostedService<CommandServiceRegistrationHost>();
             });
             return builder;
         }
@@ -112,6 +113,7 @@ namespace Discord.Addons.Hosting
                 var csc = new CommandServiceConfig();
                 config(context, csc);
                 collection.AddSingleton(new CommandService(csc));
+                collection.AddHostedService<CommandServiceRegistrationHost>();
 
             });
 

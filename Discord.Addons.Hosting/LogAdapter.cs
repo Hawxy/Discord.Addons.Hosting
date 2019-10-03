@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Discord.Addons.Hosting
 {
-    internal class LogAdapter
+    internal class LogAdapter<T> where T: class
     {
         private readonly ILogger _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
         public LogAdapter(ILoggerFactory loggerFactory, Func<LogMessage, Exception, string> formatter = null)
         {
-            _logger = loggerFactory.CreateLogger("Discord.Client");
+            _logger = loggerFactory.CreateLogger(typeof(T));
             _formatter = formatter ?? DefaultFormatter;
         }
         
