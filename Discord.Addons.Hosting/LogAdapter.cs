@@ -24,7 +24,16 @@ namespace Discord.Addons.Hosting
         private string DefaultFormatter(LogMessage message, Exception _)
             => $"{message.Source}: {message.Message}";
 
-        private static LogLevel GetLogLevel(LogSeverity severity)
-            => (LogLevel) Math.Abs((int) severity - 5);
+        private static LogLevel GetLogLevel(LogSeverity severity) 
+            => severity switch
+            {
+                LogSeverity.Critical => LogLevel.Critical,
+                LogSeverity.Error => LogLevel.Error,
+                LogSeverity.Warning => LogLevel.Warning,
+                LogSeverity.Info => LogLevel.Information,
+                LogSeverity.Verbose => LogLevel.Debug,
+                LogSeverity.Debug => LogLevel.Trace,
+                _ => throw new ArgumentOutOfRangeException(nameof(severity), severity, null)
+            };
     }
 }
