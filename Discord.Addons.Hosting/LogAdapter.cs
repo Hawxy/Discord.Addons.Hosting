@@ -34,7 +34,6 @@ namespace Discord.Addons.Hosting
         
         public Task Log(LogMessage message)
         {
-            //_logger.Log(GetLogLevel(message.Severity), message.Exception, message.Message, message.Source);
             _logger.Log(GetLogLevel(message.Severity), default, message, message.Exception, _formatter);
             return Task.CompletedTask;
         }

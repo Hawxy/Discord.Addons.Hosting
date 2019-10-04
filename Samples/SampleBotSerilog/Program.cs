@@ -31,7 +31,7 @@ namespace Sample.Serilog
                     //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ for configuration source options
                     var configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("config.json", false, true)
+                        .AddJsonFile("appsettings.json", false, true)
                         .Build();
 
                     x.AddConfiguration(configuration);
