@@ -28,30 +28,28 @@ namespace Sample.Serilog
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration(x =>
                 {
-                    //Token is always loaded via app configuration "token" field
                     //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ for configuration source options
                     var configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("config.json", false, true)
                         .Build();
+
                     x.AddConfiguration(configuration);
                 })
                 //Serilog.Extensions.Hosting is required. Don't use ConfigureLogging to add Serilog.
                 .UseSerilog()
-                .ConfigureDiscordClient<DiscordSocketClient>((context, discordBuilder) =>
+                .ConfigureDiscordHost<DiscordSocketClient>((context, configurationBuilder) =>
                 {
-                    var config = new DiscordSocketConfig
+                    configurationBuilder.SetDiscordConfiguration(new DiscordSocketConfig
                     {
                         LogLevel = LogSeverity.Verbose,
                         AlwaysDownloadUsers = true,
                         MessageCacheSize = 200
-                    };
+                    });
 
-                    discordBuilder.UseDiscordConfiguration(config);
-
-                    //Optional pattern 
-                    //var client = new DiscordSocketClient(config);
-                    //discordBuilder.AddDiscordClient(client);
+                    configurationBuilder.SetToken(context.Configuration["token"]);
+                    //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for Serilog usage
+                    configurationBuilder.SetCustomLogFormat((message, exception) => $"{message.Source}: {message.Message}");
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService((context, config) =>
@@ -59,8 +57,6 @@ namespace Sample.Serilog
                     config.LogLevel = LogSeverity.Verbose;
                     config.DefaultRunMode = RunMode.Async;
                 })
-                //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for most people.
-                .ConfigureDiscordLogFormat((message, exception) => $"{message.Source}: {message.Message}")
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<CommandHandler>();

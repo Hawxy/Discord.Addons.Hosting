@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2018 Hawxy
+   Copyright 2019 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -37,38 +37,39 @@ namespace Discord.Addons.Hosting
         /// </remarks>
         /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
-        /// <param name="config">The delegate for configuring the <see cref="DiscordClientHandler{T}" /> that will be used to construct the discord client.</param>
-        /// <returns>The (generic) host builder.</returns>
+        /// <param name="config">The delegate for the <see cref="IDiscordHostConfigurationBuilder" /> that will be used to construct the discord client.</param>
+        /// <returns>The generic host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
-        /// <exception cref="InvalidOperationException">Thrown client is already added or logged in</exception>
-        public static IHostBuilder ConfigureDiscordClient<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordClientHandler<T>> config) where T: DiscordSocketClient
+        /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
+        public static IHostBuilder ConfigureDiscordHost<T>(this IHostBuilder builder, Action<HostBuilderContext, IDiscordHostConfigurationBuilder> config) where T : DiscordSocketClient
         {
-            if(config == null)
+            if (config == null)
                 throw new ArgumentNullException(nameof(config));
 
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(DiscordSocketClient)))
                     throw new InvalidOperationException($"Cannot add more than one Discord Client to host");
-
-                var token = context.Configuration["token"];
-                TokenUtils.ValidateToken(TokenType.Bot, token);
-
-                var dsc = new DiscordClientHandler<T>();
-                config(context, dsc);
-                var client = dsc.GetClient();
-
-                if(client.LoginState != LoginState.LoggedOut)
-                    throw new InvalidOperationException("Client logged in before host startup! Make sure you aren't calling LoginAsync manually");
                 
-                collection.AddSingleton(client);
+                var dschostbuilder = new DiscordHostConfigurationBuilder();
+                config(context, dschostbuilder);
+
+                var dsconfig = dschostbuilder.Build();
+
+                collection.AddSingleton(dsconfig);
+
+                var discordClient = (T)Activator.CreateInstance(typeof(T), dsconfig.SocketConfig);
+
+                collection.AddSingleton(discordClient);
                 if(typeof(T) != typeof(DiscordSocketClient))
                     collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
+
                 collection.AddSingleton(typeof(LogAdapter<>));
                 collection.AddHostedService<DiscordHostedService>();
             });
 
             return builder;
+
         }
 
         /// <summary>
@@ -115,32 +116,6 @@ namespace Discord.Addons.Hosting
                 collection.AddSingleton(new CommandService(csc));
                 collection.AddHostedService<CommandServiceRegistrationHost>();
 
-            });
-
-            return builder;
-        }
-
-        /// <summary>
-        /// Provides a custom format to the <see cref="LogAdapter"/> used by the Client and CommandService. />
-        /// </summary>
-        /// <remarks>
-        /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
-        /// </remarks>
-        /// <param name="builder">The host builder to configure.</param>
-        /// <param name="formatter">A custom message formatter</param>
-        /// <returns>The (generic) host builder.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if formatter is null</exception>
-        /// <exception cref="InvalidOperationException">Thrown if a formatter is already added to the collection</exception>
-        public static IHostBuilder ConfigureDiscordLogFormat(this IHostBuilder builder, Func<LogMessage, Exception, string> formatter)
-        {
-            if(formatter == null)
-                throw new ArgumentNullException(nameof(formatter));
-
-            builder.ConfigureServices((context, collection) =>
-            {
-                if (collection.Any(x => x.ServiceType == typeof(Func<LogMessage, Exception, string>)))
-                    throw new InvalidOperationException("Cannot add more than one formatter to host");
-                collection.AddSingleton(formatter);
             });
 
             return builder;

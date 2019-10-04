@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2018 Hawxy
+   Copyright 2019 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,12 +15,10 @@
    limitations under the License.
  */
 #endregion
-using System;
+
 using System.Threading;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -30,9 +28,9 @@ namespace Discord.Addons.Hosting
     {
         private readonly ILogger<DiscordHostedService> _logger;
         private readonly DiscordSocketClient _client;
-        private readonly IConfiguration _config;
+        private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, IConfiguration config, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, DiscordHostConfiguration config, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
         {
             _logger = logger;
             _config = config;
@@ -43,11 +41,10 @@ namespace Discord.Addons.Hosting
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is starting");
-            await _client.LoginAsync(TokenType.Bot, _config["token"]);
+            await _client.LoginAsync(TokenType.Bot, _config.Token);
             var task = _client.StartAsync();
             await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
             if(cancellationToken.IsCancellationRequested) _logger.LogWarning("Startup has been aborted, exiting...");
-
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

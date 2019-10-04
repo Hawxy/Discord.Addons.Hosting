@@ -1,10 +1,7 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Addons.Hosting;
-using Discord.Addons.Hosting.Reliability;
-using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -13,43 +10,34 @@ namespace Sample.Simple
 {
     class Program
     {
-        //Requires C# 7.1 or later
         static async Task Main()
         {
-            var builder = new HostBuilder()
-                .ConfigureAppConfiguration(x =>
-                {
-                    //Token is always loaded via app configuration "token" field
-                    //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ for configuration source options
-                    var configuration = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("config.json", false, true)
-                        .Build();
-                    x.AddConfiguration(configuration);
-                })
+            //Creates a builder with a number of defaults already set. See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0#default-builder-settings
+            var builder = Host
+                .CreateDefaultBuilder()
                 .ConfigureLogging(x =>
                 {
-                    x.SetMinimumLevel(LogLevel.Information);
-                    //This works but isn't very pretty. I would highly suggest using Serilog or some other third-party logger
-                    //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.2#built-in-logging-providers for more logging options
+                    //The default builder adds a number of logging providers that aren't super useful for this scenario, so I recommend doing the below
+                    x.ClearProviders();
+                    //The default console logger doesn't have a great format, I recommend using a third-party one as is shown in the Serilog example
                     x.AddConsole();
-
-                    //Inject ILogger in any services/modules that require logging
-
+                    x.SetMinimumLevel(LogLevel.Debug);
                 })
-                .ConfigureDiscordClient<DiscordSocketClient>((context, discordBuilder) =>
+                //Specify the type of discord.net client via the type parameter
+                .ConfigureDiscordHost<DiscordSocketClient>((context, configurationBuilder) =>
                 {
-                    var config = new DiscordSocketConfig();
-                    discordBuilder.UseDiscordConfiguration(config);
+                    //The default builder will look for appsettings.json and any environment variables prefixed with "DOTNET_"
+                    configurationBuilder.SetToken(context.Configuration["token"]);
 
-                    //Optional pattern 
-                    //var client = new DiscordSocketClient(config);
-                    //discordBuilder.AddDiscordClient(client);
+                    configurationBuilder.SetDiscordConfiguration(new DiscordSocketConfig
+                    {
+                        LogLevel = LogSeverity.Verbose,
+                        AlwaysDownloadUsers = true,
+                        MessageCacheSize = 200
+                    });
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService()
-                //This format might be better if you're NOT using Serilog or any other third-party providers
-                .ConfigureDiscordLogFormat((message, exception) => message.ToString())
                 .ConfigureServices((context, services) =>
                 {
                     //Add any other services here
