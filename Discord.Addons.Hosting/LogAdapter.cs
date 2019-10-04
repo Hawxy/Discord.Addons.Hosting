@@ -23,12 +23,12 @@ namespace Discord.Addons.Hosting
 {
     internal class LogAdapter<T> where T: class
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<T> _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
-        public LogAdapter(ILoggerFactory loggerFactory, DiscordHostConfiguration config)
+        public LogAdapter(ILogger<T> logger, DiscordHostConfiguration config)
         {
-            _logger = loggerFactory.CreateLogger(typeof(T));
+            _logger = logger;
             _formatter = config.LogFormat;
         }
         
