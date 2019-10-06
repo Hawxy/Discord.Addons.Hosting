@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 
 [Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
-This package primarily provides extensions to a .NET Generic Host (IHostBuilder) that will run a Discord.Net socket/sharded client as a controllable IHostedService. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
+This package provides extensions to a .NET Generic Host (IHostBuilder) that will run a Discord.Net socket/sharded client as a controllable IHostedService. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
 
 Discord.Net 2.1.1+ & .NET Core 2.0+ is required.
 
@@ -17,10 +17,16 @@ var builder = new HostBuilder()
   {
     //..logging
   })
-  .ConfigureDiscordClient<DiscordSocketClient>((context, discordBuilder) =>
+  .ConfigureDiscordHost<DiscordSocketClient>((context, configurationBuilder) =>
   {
-    var config = new DiscordSocketConfig();
-    discordBuilder.UseDiscordConfiguration(config);
+     configurationBuilder.SetDiscordConfiguration(new DiscordSocketConfig
+     {
+       LogLevel = LogSeverity.Verbose,
+       AlwaysDownloadUsers = true,
+       MessageCacheSize = 200
+     });
+
+    configurationBuilder.SetToken(context.Configuration["token"]);
   })
   //Omit this if you don't use the command service
   .UseCommandService()
@@ -46,7 +52,6 @@ using (host)
 
    ```Discord.Addons.Hosting```
    ```Microsoft.Extensions.Hosting```
-   ```Microsoft.Extensions.Configuration.Json```
    
 3. Create and start your application using a HostBuilder as shown above and in the examples linked below
 
@@ -66,7 +71,7 @@ See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/m
 
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
-If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-2.2#shutdown-timeout).
+If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0#shutdowntimeout).
 
 ### Reliability 
 
