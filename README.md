@@ -75,7 +75,7 @@ If you're finding that this isn't enough time, you can modify the shutdown timeo
 
 ### Reliability 
 
-Discord.Net can occasionally fail to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and does not guarantee that the client will *always* recover. Please note that this feature is also affected by the shutdown timeout set above.
+Discord.Net can occasionally give up trying to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and won't do much if the client completely deadlocks. This feature is also affected by the shutdown timeout set above.
 
 To use the reliability extensions, start the host with ```await host.RunReliablyAsync()```.
 
