@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/Hawxy/Discord.Addons.Hosting</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageIconUrl>https://i.imgur.com/ofsSSut.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <Copyright>Hawxy 2018-2019</Copyright>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
     <Nullable>Enable</Nullable>
@@ -22,6 +22,10 @@
     <PackageReference Include="Discord.Net.Commands" Version="2.1.1" />
     <PackageReference Include="Discord.Net.WebSocket" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>    
+    <None Include="Images\icon.png" Pack="true" PackagePath="\" />    
   </ItemGroup>
 
 </Project>
