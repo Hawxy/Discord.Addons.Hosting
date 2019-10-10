@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'VS2017-Win2016'
+  vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
@@ -17,18 +17,19 @@ steps:
   inputs:
     command: build
     projects: './Discord.Addons.Hosting/Discord.Addons.Hosting.csproj'
-    arguments: --configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)
+    arguments: --configuration $(buildConfiguration) --no-restore
   displayName: 'Build'
   
 - task: DotNetCoreCLI@2
   inputs:
-    command: pack
-    packagesToPack: './Discord.Addons.Hosting/Discord.Addons.Hosting.csproj'   
-    packDirectory: '$(Build.ArtifactStagingDirectory)'
+    command: 'pack'
+    packagesToPack: './Discord.Addons.Hosting/Discord.Addons.Hosting.csproj'
+    versioningScheme: 'off'
+    verbosityPack: 'Normal'
   displayName: 'Package'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: Discord.Net.Hosting.Artifacts
+    ArtifactName: 'artifacts'
   displayName: 'Publish Artifacts'

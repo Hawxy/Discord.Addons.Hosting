@@ -74,6 +74,6 @@ namespace Discord.Addons.Hosting.Reliability
            _discord.Disconnected -= DisconnectedAsync;
            _cts?.Cancel();
            _cts?.Dispose();
-        }
+       }
     }
 }

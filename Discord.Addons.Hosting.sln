@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2041
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord.Addons.Hosting", "Discord.Addons.Hosting\Discord.Addons.Hosting.csproj", "{03ED5619-5F9E-4CC6-8B8F-7D610C3169EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleBotSerilog", "Samples\SampleBotSerilog\SampleBotSerilog.csproj", "{953BE7AC-019A-463C-900D-1346A384707E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Serilog", "Samples\SampleBotSerilog\Sample.Serilog.csproj", "{953BE7AC-019A-463C-900D-1346A384707E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleBotSimple", "Samples\SampleBotSimple\SampleBotSimple.csproj", "{E65C387F-9D99-4257-A458-1F6D5A4D80F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Simple", "Samples\SampleBotSimple\Sample.Simple.csproj", "{E65C387F-9D99-4257-A458-1F6D5A4D80F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

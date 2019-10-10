@@ -6,7 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 
-namespace SampleBotSimple
+namespace Sample.Simple
 {
     public class CommandHandler
     {
@@ -45,7 +45,7 @@ namespace SampleBotSimple
         {
             if (!command.IsSpecified || result.IsSuccess)
                 return;
-            
+
             await context.Channel.SendMessageAsync($"Error: {result}");
         }
     }

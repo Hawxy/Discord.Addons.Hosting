@@ -1,4 +1,21 @@
-﻿using System;
+#region License
+/*
+   Copyright 2019 Hawxy
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+#endregion
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -13,8 +30,8 @@ namespace Discord.Addons.Hosting.Reliability
     /// </summary>
     public static class ReliableHostExtensions
     {
-        private static ReliableDiscordHost _reliable;
-        private static CancellationTokenSource _cts;
+        private static ReliableDiscordHost? _reliable;
+        private static CancellationTokenSource? _cts;
 
         /// <summary>
         /// Adds the Reliability Service and Runs the host. This function will only return if <see cref="StopReliablyAsync"/> is called elsewhere.
@@ -22,18 +39,20 @@ namespace Discord.Addons.Hosting.Reliability
         /// <param name="host">The host to configure.</param>
         public static async Task RunReliablyAsync(this IHost host)
         {
-            host.WithReliability();
-            await host.StartAsync();
+            await host.WithReliability().StartAsync();
             _cts = new CancellationTokenSource();
 
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) =>
             {
                 _ = host.StopReliablyAsync();
             };
-            Console.CancelKeyPress += (sender, e) => {
+
+            Console.CancelKeyPress += (sender, e) =>
+            {
                 e.Cancel = true;
                 _ = host.StopReliablyAsync();
             };
+
 
             await Task.Delay(-1, _cts.Token).ContinueWith(_ => { });
         }
@@ -61,14 +80,13 @@ namespace Discord.Addons.Hosting.Reliability
         public static async Task StopReliablyAsync(this IHost host)
         {
             if (_reliable == null)
-                throw new InvalidOperationException("Reliable host is null. Shutdown the host normally with StopAsync instead.");
+                throw new InvalidOperationException("Reliable host is null. The host may not be running or you didn't start it with RunReliablyAsync()");
             _reliable.Dispose();
-            _reliable = null;
-            await host.StopAsync().ContinueWith(_ =>
+            await host.StopAsync().ContinueWith(_ => 
             {
-                _cts.Cancel();
-                _cts.Dispose();
+                _cts?.Cancel();
+                _cts?.Dispose();
             });
         }
-    }
+     }
 }

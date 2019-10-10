@@ -6,14 +6,19 @@ using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SampleBotSerilog
+namespace Sample.Serilog
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
-        //Will be injected
-        public ILogger<PublicModule> _logger { get; set; }
-        //You can inject the host too. This is useful if you want to shutdown the host via a command, but be careful with it.
-        public IHost _host { get; set; }
+        private readonly ILogger<PublicModule> _logger;
+        //You can inject the host. This is useful if you want to shutdown the host via a command, but be careful with it.
+        private readonly IHost _host;
+
+        public PublicModule(IHost host, ILogger<PublicModule> logger)
+        {
+            _host = host;
+            _logger = logger;
+        }
 
         [Command("ping")]
         [Alias("pong", "hello")]
@@ -47,6 +52,6 @@ namespace SampleBotSerilog
         }
 
         private static LogLevel GetLogLevel(LogSeverity severity)
-            => (LogLevel)(Math.Abs((int)severity - 5));
+            => (LogLevel)Math.Abs((int)severity - 5);
     }
 }
