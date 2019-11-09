@@ -4,15 +4,22 @@ using System.Threading.Tasks;
 
 namespace Discord.Addons.Hosting
 {
+    /// <summary>
+    /// Base class for implementing an <see cref="IHostedService"/> with one-time setup requirements.
+    /// </summary>
     public abstract class InitializedService : IHostedService
     {
         private bool _initialized;
+
+        /// <summary>
+        /// This method is called when the <see cref="IHostedService"/> starts for the first time.
+        /// </summary>
+        /// <param name="cancellationToken">Triggered when <see cref="IHostedService"/> is stopped during startup.</param>
         public abstract Task InitializeAsync(CancellationToken cancellationToken);
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             if (_initialized) return;
-            var t = InitializeAsync(cancellationToken);
-            await Task.WhenAny(t, Task.Delay(Timeout.Infinite, cancellationToken));
+            await InitializeAsync(cancellationToken);
             if (!cancellationToken.IsCancellationRequested) _initialized = true;
         }
 
