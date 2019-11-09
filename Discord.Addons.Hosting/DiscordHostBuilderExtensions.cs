@@ -80,13 +80,7 @@ namespace Discord.Addons.Hosting
         /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
         public static IHostBuilder UseCommandService(this IHostBuilder builder)
         {
-            builder.ConfigureServices((context, collection) =>
-            {
-                if (collection.Any(x => x.ServiceType == typeof(CommandService)))
-                    throw new InvalidOperationException("Cannot add more than one CommandService to host");
-                collection.AddSingleton<CommandService>();
-                collection.AddHostedService<CommandServiceRegistrationHost>();
-            });
+            builder.UseCommandService((context, config) => { });            
             return builder;
         }
 
@@ -114,8 +108,7 @@ namespace Discord.Addons.Hosting
                 var csc = new CommandServiceConfig();
                 config(context, csc);
                 collection.AddSingleton(new CommandService(csc));
-                collection.AddHostedService<CommandServiceRegistrationHost>();
-
+                collection.AddHostedService<CommandServiceInitializerHost>();
             });
 
             return builder;
