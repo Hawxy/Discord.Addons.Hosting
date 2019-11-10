@@ -58,13 +58,13 @@ using (host)
 
 This section assumes some prior knowledge of Dependency Injection within the .NET ecosystem. Take a read of [this](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) and [this](https://discord.foxbot.me/stable/guides/commands/dependency-injection.html) if you have no idea what any of this means.
 
-Most services I see people write within Discord.NET world tend to get instantiated & injected into `CommandModule`'s or other services by the container when required. They're simple and serve to hold some basic state and/or abstract away common functionality. However, some services are more complex and require some kind of manual scaffolding to work as intended, such as subscribing to events published by the `DiscordSocketClient` or by performing an `async` request on creation. These services tend to operate in isolation and thus do not get initialized by being injected into a `CommandModule` or some other dependent service.
+Most services people write within the Discord.NET world tend to fall in one of two buckets. One type gets instantiated & injected into `CommandModule`'s or other services by the container when required and simply exist to hold some basic state and/or abstract away common functionality. The other type is more complex and requires some kind of manual scaffolding to work as intended, such as subscribing to events published by the `DiscordSocketClient` or by performing an `async` request on creation. These services tend to operate in isolation and thus do not get initialized by being injected into a `CommandModule` or some other dependent service.
 
-How do we solve this problem? The class constructor is certainly not an appropriate place. Do we call `GetRequiredService<T>` and run an `Initialize()` method on every service that needs it? Do we create an attribute or interface and use reflection to get all the services we need to initialize? All of these solutions usually end up being a maintenance burden, an anti-pattern, or both.
+So, how do we initialize the latter type of service? Do we call `GetRequiredService<T>` and run an `Initialize()` method on every service that needs it? Do we create an attribute or interface and use reflection to get all the services we need to initialize? Do we just initialize them before adding them to the container? At a large scale, all of these solutions usually end up being a maintenance burden, an anti-pattern, or both.
 
 Since we're using a `Host`, this problem is already solved, as the `IHostedService` can handle all of our initialisation concerns for us. **Note: Implementations of `IHostedService` should not be injected into any other service/`CommandModule` etc, either seperate your initialization concerns from your functional concerns or rethink your architecture.**
 
-- I've included a base class `InitializedService` for services that simply need to be initialized once for the lifetime of the application (such as a `CommandHandler`, and any isolated service that just listens to client events). 
+- I've included the base class `InitializedService` for services that simply need to be initialized once for the lifetime of the application (such as a `CommandHandler`, and any isolated service that just listens to client events). This base class implements `IHostedService` and simply keeps track of if `InitializeAsync` has been called already.
 
 ```csharp
 public class CommandHandler : InitializedService
@@ -92,7 +92,9 @@ public class CommandHandler : InitializedService
 }
  ````
 
-- Services that run on a timer can either use the above pattern, or an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice)
+- Services that run on a timer should either use the above pattern to start the timer, or an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice)
+
+- Services with complex startup & shutdown activities should implement `IHostedService`.
 
 
 ### Examples
