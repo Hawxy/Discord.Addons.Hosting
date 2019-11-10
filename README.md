@@ -60,6 +60,12 @@ Fully working examples are available [here](https://github.com/Hawxy/Discord.Add
 
 If you want something more advanced, one of my bots CitizenEnforcer uses this extension. You can find it [here](https://github.com/Hawxy/CitizenEnforcer)
 
+### Serilog
+
+Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
+
+See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage
+
 ### Services
 
 This section assumes some prior knowledge of Dependency Injection within the .NET ecosystem. Take a read of [this](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) and [this](https://discord.foxbot.me/stable/guides/commands/dependency-injection.html) if you have no idea what any of this means.
@@ -101,12 +107,6 @@ public class CommandHandler : InitializedService
 - Services that run on a timer should either use the above pattern to start the timer, or an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice)
 
 - Services with complex startup & shutdown activities should implement `IHostedService` directly.
-
-### Serilog
-
-Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
-
-See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage
 
 ### Shutdown
 
