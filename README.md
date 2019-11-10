@@ -74,7 +74,7 @@ Most services people write within the Discord.NET world tend to fall in one of t
 
 So, how do we initialize the latter type of service? Do we call `GetRequiredService<T>` and run an `Initialize()` method on every service that needs it? Do we create an attribute or interface and use reflection to get all the services we need to initialize? Do we just initialize them before adding them to the container? At a large scale, all of these solutions usually end up being a maintenance burden, an anti-pattern, or both.
 
-Since we're using a `Host`, this problem is already solved, as the `IHostedService` can handle all of our initialization concerns for us. **Note: Implementations of `IHostedService` should not be injected into any other service/`CommandModule` etc, either seperate your initialization concerns from your functional concerns or rethink your architecture.**
+Since we're using a `Host`, this problem is already solved, as the `IHostedService` can handle all of our initialization concerns for us. **Note: Implementations of `IHostedService` should not be injected into any other service/`CommandModule` etc, either separate your initialization concerns from your functional concerns or rethink your architecture.**
 
 - I've included the base class `InitializedService` for services that simply need to be initialized once for the lifetime of the application (such as a `CommandHandler`, and any isolated service that just listens to client events). This base class implements `IHostedService` and simply keeps track of if `InitializeAsync` has been called already. 
 
