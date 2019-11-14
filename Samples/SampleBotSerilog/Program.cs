@@ -59,7 +59,7 @@ namespace Sample.Serilog
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<CommandHandler>();
+                    services.AddHostedService<CommandHandler>();
                 })
                 .UseConsoleLifetime();
 
@@ -68,8 +68,6 @@ namespace Sample.Serilog
             var host = builder.Build();
             using (host)
             {
-                await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
-
                 while (true)
                 {
                     Log.Information("Starting!");

@@ -33,14 +33,13 @@ var builder = new HostBuilder()
   .ConfigureServices((context, services) =>
   {
     //Add any other services here
-    services.AddSingleton<CommandHandler>();
+    services.AddHostedService<CommandHandler>();
   })
   .UseConsoleLifetime();
 
 var host = builder.Build();
 using (host)
 {
-  await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
   await host.RunAsync();
 }
 ```
@@ -66,6 +65,48 @@ If you want something more advanced, one of my bots CitizenEnforcer uses this ex
 Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
 
 See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage
+
+### Services
+
+This section assumes some prior knowledge of Dependency Injection within the .NET ecosystem. Take a read of [this](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) and [this](https://discord.foxbot.me/stable/guides/commands/dependency-injection.html) if you have no idea what any of this means.
+
+Most services people write within the Discord.NET world tend to fall in one of two buckets. One type gets instantiated & injected into `CommandModule`'s or other services by the container when required and simply exist to hold some basic state and/or abstract away common functionality. The other type is more complex and requires some kind of manual scaffolding to work as intended, such as subscribing to events published by the `DiscordSocketClient` or by performing an `async` request on creation. These services tend to operate in isolation and thus do not get initialized by being injected into a `CommandModule` or some other dependent service.
+
+So, how do we initialize the latter type of service? Do we call `GetRequiredService<T>` and run an `Initialize()` method on every service that needs it? Do we create an attribute or interface and use reflection to get all the services we need to initialize? Do we just initialize them before adding them to the container? At a large scale, all of these solutions usually end up being a maintenance burden, an anti-pattern, or both.
+
+Since we're using a `Host`, this problem is already solved, as the `IHostedService` can handle all of our initialization concerns for us. **Note: Implementations of `IHostedService` should not be injected into any other service/`CommandModule` etc, either separate your initialization concerns from your functional concerns or rethink your architecture.**
+
+- I've included the base class `InitializedService` for services that simply need to be initialized once for the lifetime of the application (such as a `CommandHandler`, and any isolated service that just listens to client events). This base class implements `IHostedService` and simply keeps track of if `InitializeAsync` has been called already. 
+
+```csharp
+public class CommandHandler : InitializedService
+{
+    private readonly IServiceProvider _provider;
+    private readonly DiscordSocketClient _client;
+    private readonly CommandService _commandService;
+    private readonly IConfiguration _config;
+
+    public CommandHandler(IServiceProvider provider, DiscordSocketClient client, CommandService commandService, IConfiguration config)
+    {
+        _provider = provider;
+        _client = client;
+        _commandService = commandService;
+        _config = config;
+    }
+    public override async Task InitializeAsync(CancellationToken cancellationToken)
+    {
+        _client.MessageReceived += HandleMessage;
+        _commandService.CommandExecuted += CommandExecutedAsync;
+        await _commandService.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
+    }
+        
+    //.....
+}
+ ````
+
+- Services that run on a timer should either use the above pattern to start the timer, or an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice)
+
+- Services with complex startup & shutdown activities should implement `IHostedService` directly.
 
 ### Shutdown
 

@@ -41,15 +41,13 @@ namespace Sample.Simple
                 .ConfigureServices((context, services) =>
                 {
                     //Add any other services here
-                    services.AddSingleton<CommandHandler>();
+                    services.AddHostedService<CommandHandler>();
                 })
                 .UseConsoleLifetime();
-
-
+            
             var host = builder.Build();
             using (host)
             {
-                await host.Services.GetRequiredService<CommandHandler>().InitializeAsync();
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
                 //If you want the host to attempt a restart when the client fails to reconnect, use the Reliability extension.

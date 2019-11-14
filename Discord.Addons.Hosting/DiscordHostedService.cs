@@ -43,7 +43,7 @@ namespace Discord.Addons.Hosting
             _logger.LogInformation("Discord.Net hosted service is starting");
             await _client.LoginAsync(TokenType.Bot, _config.Token);
             var task = _client.StartAsync();
-            await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
+            await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
             if(cancellationToken.IsCancellationRequested) _logger.LogWarning("Startup has been aborted, exiting...");
         }
 
@@ -51,7 +51,7 @@ namespace Discord.Addons.Hosting
         {
             _logger.LogInformation("Discord.Net hosted service is stopping");
             var task = _client.StopAsync();
-            await Task.WhenAny(task, Task.Delay(-1, cancellationToken));
+            await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
             if (cancellationToken.IsCancellationRequested) _logger.LogCritical("Discord.NET client could not be stopped within the given timeout and may have permanently deadlocked");
         }
     }

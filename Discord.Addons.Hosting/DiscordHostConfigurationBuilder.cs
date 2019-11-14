@@ -41,20 +41,20 @@ namespace Discord.Addons.Hosting
         private Func<LogMessage, Exception, string> _logFormat = (message, exception) => $"{message.Source}: {message.Message}";
         private DiscordSocketConfig _socketConfig = new DiscordSocketConfig();
 
-        public DiscordHostConfigurationBuilder SetDiscordConfiguration(DiscordSocketConfig config)
+        public IDiscordHostConfigurationBuilder SetDiscordConfiguration(DiscordSocketConfig config)
         {
             _socketConfig = config;
             return this;
         }
 
-        public DiscordHostConfigurationBuilder SetToken(string token)
+        public IDiscordHostConfigurationBuilder SetToken(string token)
         {
             TokenUtils.ValidateToken(TokenType.Bot, token);
            _token = token;
             return this;
         }
 
-        public DiscordHostConfigurationBuilder SetCustomLogFormat(Func<LogMessage, Exception, string> formatter)
+        public IDiscordHostConfigurationBuilder SetCustomLogFormat(Func<LogMessage, Exception, string> formatter)
         {
             _logFormat = formatter;
             return this;
@@ -66,9 +66,9 @@ namespace Discord.Addons.Hosting
 
     public interface IDiscordHostConfigurationBuilder
     {
-        DiscordHostConfigurationBuilder SetDiscordConfiguration(DiscordSocketConfig config);
-        DiscordHostConfigurationBuilder SetToken(string token);
-        DiscordHostConfigurationBuilder SetCustomLogFormat(Func<LogMessage, Exception, string> formatter);
+        IDiscordHostConfigurationBuilder SetDiscordConfiguration(DiscordSocketConfig config);
+        IDiscordHostConfigurationBuilder SetToken(string token);
+        IDiscordHostConfigurationBuilder SetCustomLogFormat(Func<LogMessage, Exception, string> formatter);
         DiscordHostConfiguration Build();
     }
 }

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Addons.Hosting;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 
 namespace Sample.Serilog
 {
-    public class CommandHandler
+    public class CommandHandler : InitializedService
     {
         private readonly IServiceProvider _provider;
         private readonly DiscordSocketClient _client;
@@ -21,11 +23,11 @@ namespace Sample.Serilog
             _client = client;
             _commandService = commandService;
             _config = config;
+        }
+        public override async Task InitializeAsync(CancellationToken cancellationToken)
+        {
             _client.MessageReceived += HandleMessage;
             _commandService.CommandExecuted += CommandExecutedAsync;
-        }
-        public async Task InitializeAsync()
-        {
             await _commandService.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         }
 
@@ -47,6 +49,6 @@ namespace Sample.Serilog
                 return;
 
             await context.Channel.SendMessageAsync($"Error: {result}");
-        }
+        }    
     }
 }
