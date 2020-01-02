@@ -15,11 +15,12 @@
    limitations under the License.
  */
 #endregion
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting.Util
 {
     internal class LogAdapter<T> where T: class
     {

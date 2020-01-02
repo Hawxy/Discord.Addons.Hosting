@@ -17,6 +17,7 @@
 #endregion
 using System;
 using System.Linq;
+using Discord.Addons.Hosting.Util;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,11 +79,7 @@ namespace Discord.Addons.Hosting
         /// <param name="builder">The host builder to configure.</param> 
         /// <returns>The (generic) host builder.</returns>
         /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
-        public static IHostBuilder UseCommandService(this IHostBuilder builder)
-        {
-            builder.UseCommandService((context, config) => { });            
-            return builder;
-        }
+        public static IHostBuilder UseCommandService(this IHostBuilder builder) => builder.UseCommandService((context, config) => { });
 
         /// <summary>
         /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.Net client. />

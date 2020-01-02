@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -31,10 +30,7 @@ namespace Sample.Serilog
         [Command("shutdown")]
         public async Task Stop()
         {
-            //Don't do this if you're using the reliability extension, as it'll just restart the bot.
             _ = _host.StopAsync();
-            //Instead do this
-            //_ = _host.StopReliablyAsync();
         }
 
         [Command("log")]

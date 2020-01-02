@@ -17,6 +17,7 @@
 #endregion
 using System.Threading;
 using System.Threading.Tasks;
+using Discord.Addons.Hosting.Util;
 using Discord.Commands;
 using Microsoft.Extensions.Logging;
 

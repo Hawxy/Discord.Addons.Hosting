@@ -113,13 +113,3 @@ public class CommandHandler : InitializedService
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
 If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0#shutdowntimeout).
-
-### Reliability 
-
-Discord.Net can occasionally give up trying to reconnect after an extended outage. This library provides a basic solution that will automatically attempt to restart the host on a failure. Please note that this functionality is experimental and won't do much if the client completely deadlocks. This feature is also affected by the shutdown timeout set above.
-
-To use the reliability extensions, start the host with ```await host.RunReliablyAsync()```.
-
-To shutdown the host, it's recommended to add a shutdown command to your bot and call ```host.StopReliablyAsync()```.
-
-This behaviour is similar to the usage of ```RunAsync()``` and ```StopAsync()```

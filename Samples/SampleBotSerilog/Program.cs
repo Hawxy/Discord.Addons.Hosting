@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Hosting;
-using Discord.Addons.Hosting.Reliability;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +52,7 @@ namespace Sample.Serilog
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService((context, config) =>
-                {
+                {                    
                     config.LogLevel = LogSeverity.Verbose;
                     config.DefaultRunMode = RunMode.Async;
                 })
@@ -63,23 +62,20 @@ namespace Sample.Serilog
                 })
                 .UseConsoleLifetime();
 
-            //Start and stop just by hitting enter
+            //Stop just by hitting enter
             //See https://github.com/aspnet/Extensions/tree/master/src/Hosting/samples/GenericHostSample for other control patterns
             var host = builder.Build();
             using (host)
             {
-                while (true)
-                {
-                    Log.Information("Starting!");
-                    await host.StartAsync();
-                    Log.Information("Started! Press <enter> to stop.");
-                    Console.ReadLine();
+                Log.Information("Starting!");
+                await host.RunAsync();
+                Log.Information("Started! Press <enter> to stop.");
+                Console.ReadLine();
 
-                    Log.Information("Stopping!");
-                    await host.StopAsync();
-                    Log.Information("Stopped! Press <enter> to start");
-                    Console.ReadLine();
-                }
+                Log.Information("Stopping!");
+                await host.StopAsync();
+                Log.Information("Stopped!");
+                Console.ReadLine();
             }
         }
     }

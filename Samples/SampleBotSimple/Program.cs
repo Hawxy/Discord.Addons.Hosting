@@ -35,6 +35,7 @@ namespace Sample.Simple
                         AlwaysDownloadUsers = true,
                         MessageCacheSize = 200
                     });
+
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService()
@@ -50,8 +51,6 @@ namespace Sample.Simple
             {
                 //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
                 await host.RunAsync();
-                //If you want the host to attempt a restart when the client fails to reconnect, use the Reliability extension.
-                //await host.RunReliablyAsync();
             }
         }
     }
