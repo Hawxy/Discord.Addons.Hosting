@@ -33,10 +33,10 @@ namespace Discord.Addons.Hosting
         private readonly DiscordSocketClient _client;
         private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptionsMonitor<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
         {
             _logger = logger;
-            _config = options.CurrentValue;
+            _config = options.Value;
             _client = client;
             _client.Log += adapter.Log;
         }

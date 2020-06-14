@@ -39,9 +39,8 @@ namespace Discord.Addons.Hosting
         /// </remarks>
         /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
-        /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to construct the discord client.</param>
+        /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
         /// <returns>The generic host builder.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
         /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
         public static IHostBuilder ConfigureDiscordHost<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T : DiscordSocketClient
         {
