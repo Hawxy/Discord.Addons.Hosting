@@ -17,7 +17,7 @@ var builder = new HostBuilder()
   {
     //..logging
   })
-  .ConfigureDiscordHost<DiscordSocketClient>((context, configurationBuilder) =>
+  .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
   {
      config.SocketConfig = new DiscordSocketConfig
       {
