@@ -64,19 +64,18 @@ namespace Sample.Serilog
                 .UseConsoleLifetime();
 
             //Stop just by hitting enter
-            //See https://github.com/aspnet/Extensions/tree/master/src/Hosting/samples/GenericHostSample for other control patterns
+            //See https://github.com/aspnet/Hosting/blob/master/samples/GenericHostSample for other control patterns
             var host = builder.Build();
             using (host)
             {
                 Log.Information("Starting!");
-                await host.RunAsync();
+                await host.StartAsync();
                 Log.Information("Started! Press <enter> to stop.");
                 Console.ReadLine();
 
                 Log.Information("Stopping!");
                 await host.StopAsync();
                 Log.Information("Stopped!");
-                Console.ReadLine();
             }
         }
     }

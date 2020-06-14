@@ -33,7 +33,17 @@ namespace Sample.Simple
                     x.SetMinimumLevel(LogLevel.Debug);
                 })
                 //Specify the type of discord.net client via the type parameter
-                .ConfigureDiscordHost<DiscordSocketClient>()
+                .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
+                {
+                    config.SocketConfig = new DiscordSocketConfig
+                    {
+                        LogLevel = LogSeverity.Verbose,
+                        AlwaysDownloadUsers = true,
+                        MessageCacheSize = 200
+                    };
+
+                    config.Token = context.Configuration["token"];
+                })
                 //Omit this if you don't use the command service
                 .UseCommandService()
                 .ConfigureServices((context, services) =>
