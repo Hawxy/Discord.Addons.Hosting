@@ -16,11 +16,14 @@
  */
 #endregion
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting
 {
@@ -30,10 +33,10 @@ namespace Discord.Addons.Hosting
         private readonly DiscordSocketClient _client;
         private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, DiscordHostConfiguration config, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
         {
             _logger = logger;
-            _config = config;
+            _config = options.Value;
             _client = client;
             _client.Log += adapter.Log;
         }
@@ -41,18 +44,29 @@ namespace Discord.Addons.Hosting
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is starting");
-            await _client.LoginAsync(TokenType.Bot, _config.Token);
-            var task = _client.StartAsync();
-            await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
-            if(cancellationToken.IsCancellationRequested) _logger.LogWarning("Startup has been aborted, exiting...");
+            
+            try
+            {
+                await _client.LoginAsync(TokenType.Bot, _config.Token).WithCancellation(cancellationToken);
+                await _client.StartAsync().WithCancellation(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Startup has been aborted, exiting...");
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Discord.Net hosted service is stopping");
-            var task = _client.StopAsync();
-            await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
-            if (cancellationToken.IsCancellationRequested) _logger.LogCritical("Discord.NET client could not be stopped within the given timeout and may have permanently deadlocked");
+            try
+            {
+                await _client.StopAsync().WithCancellation(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogCritical("Discord.NET client could not be stopped within the given timeout and may have permanently deadlocked");
+            }
         }
     }
 }

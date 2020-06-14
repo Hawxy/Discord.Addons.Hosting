@@ -15,21 +15,23 @@
    limitations under the License.
  */
 #endregion
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting.Util
 {
     internal class LogAdapter<T> where T: class
     {
         private readonly ILogger<T> _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
-        public LogAdapter(ILogger<T> logger, DiscordHostConfiguration config)
+        public LogAdapter(ILogger<T> logger, IOptions<DiscordHostConfiguration> options)
         {
             _logger = logger;
-            _formatter = config.LogFormat;
+            _formatter = options.Value.LogFormat;
         }
         
         public Task Log(LogMessage message)
