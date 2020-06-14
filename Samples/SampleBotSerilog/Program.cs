@@ -37,18 +37,19 @@ namespace Sample.Serilog
                 })
                 //Serilog.Extensions.Hosting is required. Don't use ConfigureLogging to add Serilog.
                 .UseSerilog()
-                .ConfigureDiscordHost<DiscordSocketClient>((context, configurationBuilder) =>
+                .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
                 {
-                    configurationBuilder.SetDiscordConfiguration(new DiscordSocketConfig
+                    config.SocketConfig = new DiscordSocketConfig
                     {
                         LogLevel = LogSeverity.Verbose,
                         AlwaysDownloadUsers = true,
                         MessageCacheSize = 200
-                    });
+                    };
 
-                    configurationBuilder.SetToken(context.Configuration["token"]);
+                    config.Token = context.Configuration["token"];
+
                     //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for Serilog usage
-                    configurationBuilder.SetCustomLogFormat((message, exception) => $"{message.Source}: {message.Message}");
+                    config.LogFormat = (message, exception) => $"{message.Source}: {message.Message}";
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService((context, config) =>

@@ -22,6 +22,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting
 {
@@ -31,37 +32,30 @@ namespace Discord.Addons.Hosting
     public static class DiscordHostBuilderExtensions
     {
         /// <summary>
-        /// Adds and configures a Discord.Net hosted instance of type <typeparamref name="T"/>
+        /// Adds and optionally configures a Discord.Net hosted instance of type <typeparamref name="T"/>
         /// </summary>
         /// <remarks>
         /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
         /// </remarks>
         /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
-        /// <param name="config">The delegate for the <see cref="IDiscordHostConfigurationBuilder" /> that will be used to construct the discord client.</param>
+        /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to construct the discord client.</param>
         /// <returns>The generic host builder.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <see cref="config"/> is null</exception>
         /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-        public static IHostBuilder ConfigureDiscordHost<T>(this IHostBuilder builder, Action<HostBuilderContext, IDiscordHostConfigurationBuilder> config) where T : DiscordSocketClient
+        public static IHostBuilder ConfigureDiscordHost<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T : DiscordSocketClient
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
-
             builder.ConfigureServices((context, collection) =>
             {
                 if (collection.Any(x => x.ServiceType == typeof(DiscordSocketClient)))
                     throw new InvalidOperationException($"Cannot add more than one Discord Client to host");
-                
-                var dschostbuilder = new DiscordHostConfigurationBuilder();
-                config(context, dschostbuilder);
 
-                var dsconfig = dschostbuilder.Build();
+                collection.AddOptions<DiscordHostConfiguration>().Validate(x => ValidateToken(x.Token));
 
-                collection.AddSingleton(dsconfig);
+                if (config != null)
+                    collection.Configure<DiscordHostConfiguration>(x => config(context, x));
 
-                var discordClient = (T)Activator.CreateInstance(typeof(T), dsconfig.SocketConfig);
-
-                collection.AddSingleton(discordClient);
+                collection.AddSingleton(x=> (T)Activator.CreateInstance(typeof(T), x.GetService<IOptions<DiscordHostConfiguration>>().Value.SocketConfig));
                 if(typeof(T) != typeof(DiscordSocketClient))
                     collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
 
@@ -70,6 +64,19 @@ namespace Discord.Addons.Hosting
             });
 
             return builder;
+
+            static bool ValidateToken(string token)
+            {
+                try
+                {
+                    TokenUtils.ValidateToken(TokenType.Bot, token);
+                    return true;
+                }
+                catch (Exception e) when (e is ArgumentNullException || e is ArgumentException)
+                {
+                    return false;
+                }
+            }
 
         }
 
@@ -102,9 +109,9 @@ namespace Discord.Addons.Hosting
                 if (collection.Any(x => x.ServiceType == typeof(CommandService)))
                     throw new InvalidOperationException("Cannot add more than one CommandService to host");
 
-                var csc = new CommandServiceConfig();
-                config(context, csc);
-                collection.AddSingleton(new CommandService(csc));
+                collection.Configure<CommandServiceConfig>(x => config(context, x));
+
+                collection.AddSingleton(x=> new CommandService(x.GetService<IOptions<CommandServiceConfig>>().Value));
                 collection.AddHostedService<CommandServiceInitializerHost>();
             });
 

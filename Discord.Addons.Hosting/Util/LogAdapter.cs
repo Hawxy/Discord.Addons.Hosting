@@ -19,6 +19,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting.Util
 {
@@ -27,10 +28,10 @@ namespace Discord.Addons.Hosting.Util
         private readonly ILogger<T> _logger;
         private readonly Func<LogMessage, Exception, string> _formatter;
        
-        public LogAdapter(ILogger<T> logger, DiscordHostConfiguration config)
+        public LogAdapter(ILogger<T> logger, IOptions<DiscordHostConfiguration> options)
         {
             _logger = logger;
-            _formatter = config.LogFormat;
+            _formatter = options.Value.LogFormat;
         }
         
         public Task Log(LogMessage message)

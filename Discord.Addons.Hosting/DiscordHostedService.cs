@@ -23,6 +23,7 @@ using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting
 {
@@ -32,10 +33,10 @@ namespace Discord.Addons.Hosting
         private readonly DiscordSocketClient _client;
         private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, DiscordHostConfiguration config, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptionsMonitor<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
         {
             _logger = logger;
-            _config = config;
+            _config = options.CurrentValue;
             _client = client;
             _client.Log += adapter.Log;
         }
