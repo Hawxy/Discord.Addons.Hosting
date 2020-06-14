@@ -107,3 +107,7 @@ public class CommandHandler : InitializedService
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
 If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0#shutdowntimeout).
+
+### IOptions
+
+This package uses `Microsoft.Extensions.Options` internally, so both the `DiscordHostConfiguration` and `CommandServiceConfig` can be configured within the services registration instead of within the `HostBuilder` extensions if it better suits your scenario.
