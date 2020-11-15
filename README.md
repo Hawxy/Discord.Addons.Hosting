@@ -59,7 +59,9 @@ If you want something more advanced, one of my bots CitizenEnforcer uses this ex
 
 ### Serilog
 
-I highly recommend using Serilog instead of the standard Microsoft logging. Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
+I highly recommend using Serilog instead of the standard Microsoft logging. 
+
+Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
 
 See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage.
 
