@@ -43,7 +43,7 @@ namespace Discord.Addons.Hosting
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Discord.Net hosted service is starting");
+            _logger.LogInformation("Discord.NET hosted service is starting");
             
             try
             {
@@ -58,7 +58,7 @@ namespace Discord.Addons.Hosting
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Discord.Net hosted service is stopping");
+            _logger.LogInformation("Discord.NET hosted service is stopping");
             try
             {
                 await _client.StopAsync().WithCancellation(cancellationToken);

@@ -33,7 +33,7 @@ namespace Sample.Serilog
 
         private async Task HandleMessage(SocketMessage incomingMessage)
         {
-            if (!(incomingMessage is SocketUserMessage message)) return;
+            if (incomingMessage is not SocketUserMessage message) return;
             if (message.Source != MessageSource.User) return;
 
             int argPos = 0;

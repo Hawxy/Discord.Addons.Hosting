@@ -63,19 +63,11 @@ namespace Sample.Serilog
                 })
                 .UseConsoleLifetime();
 
-            //Stop just by hitting enter
-            //See https://github.com/aspnet/Hosting/blob/master/samples/GenericHostSample for other control patterns
             var host = builder.Build();
             using (host)
             {
-                Log.Information("Starting!");
-                await host.StartAsync();
-                Log.Information("Started! Press <enter> to stop.");
-                Console.ReadLine();
-
-                Log.Information("Stopping!");
-                await host.StopAsync();
-                Log.Information("Stopped!");
+                //Fire and forget. Will run until console is closed or the service is stopped. Basically the same as normally running the bot.
+                await host.RunAsync();
             }
         }
     }
