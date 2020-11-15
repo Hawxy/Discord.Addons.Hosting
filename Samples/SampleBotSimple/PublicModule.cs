@@ -28,13 +28,14 @@ namespace Sample.Simple
         }
 
         [Command("shutdown")]
-        public async Task Stop()
+        public Task Stop()
         {
             _ = _host.StopAsync();
+            return Task.CompletedTask;
         }
 
         [Command("log")]
-        public async Task TestLogs()
+        public Task TestLogs()
         {
             _logger.LogTrace("This is a trace log");
             _logger.LogDebug("This is a debug log");
@@ -45,6 +46,8 @@ namespace Sample.Simple
 
             _logger.Log(GetLogLevel(LogSeverity.Error), "Error logged from a Discord LogSeverity.Error");
             _logger.Log(GetLogLevel(LogSeverity.Info), "Information logged from Discord LogSeverity.Info ");
+
+            return Task.CompletedTask;
         }
 
         private static LogLevel GetLogLevel(LogSeverity severity)

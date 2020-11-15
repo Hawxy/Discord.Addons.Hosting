@@ -54,7 +54,7 @@ namespace Discord.Addons.Hosting
                 if (config != null)
                     collection.Configure<DiscordHostConfiguration>(x => config(context, x));
 
-                collection.AddSingleton(x=> (T)Activator.CreateInstance(typeof(T), x.GetService<IOptions<DiscordHostConfiguration>>().Value.SocketConfig));
+                collection.AddSingleton(x=> (T)Activator.CreateInstance(typeof(T), x.GetRequiredService<IOptions<DiscordHostConfiguration>>().Value.SocketConfig)!);
                 if(typeof(T) != typeof(DiscordSocketClient))
                     collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
 
@@ -110,7 +110,7 @@ namespace Discord.Addons.Hosting
 
                 collection.Configure<CommandServiceConfig>(x => config(context, x));
 
-                collection.AddSingleton(x=> new CommandService(x.GetService<IOptions<CommandServiceConfig>>().Value));
+                collection.AddSingleton(x=> new CommandService(x.GetRequiredService<IOptions<CommandServiceConfig>>().Value));
                 collection.AddHostedService<CommandServiceInitializerHost>();
             });
 

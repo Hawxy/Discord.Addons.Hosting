@@ -10,9 +10,9 @@ namespace Discord.Addons.Hosting.Util
         {
             var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            using (cancellationToken.Register(state =>
+            await using (cancellationToken.Register(state =>
                 {
-                    ((TaskCompletionSource<object>)state).TrySetResult(null!);
+                    ((TaskCompletionSource<object>)state!).TrySetResult(null!);
                 },
                 tcs))
             {
