@@ -4,7 +4,7 @@
 [Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
 This package provides extensions to a .NET Generic Host (IHostBuilder) that will run a Discord.Net socket/sharded client as a controllable IHostedService. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
 
-Discord.Net 2.2.0+ & .NET Core 2.1+ is required.
+Discord.Net 2.2.0+ & .NET Core 3.1+ is required.
 
 ```csharp
 var builder = new HostBuilder()               
@@ -57,7 +57,7 @@ If you want something more advanced, one of my bots CitizenEnforcer uses this ex
 
 ### Serilog
 
-Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
+I highly recommend using Serilog instead of the standard Microsoft logging. Serilog should be added to the host with ```Serilog.Extensions.Hosting```. 
 
 See the Serilog [example](https://github.com/Hawxy/Discord.Addons.Hosting/tree/master/Samples/SampleBotSerilog) for usage.
 
@@ -105,7 +105,7 @@ public class CommandHandler : InitializedService
 
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
-If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0#shutdowntimeout).
+If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-5.0#shutdowntimeout).
 
 ### IOptions
 
