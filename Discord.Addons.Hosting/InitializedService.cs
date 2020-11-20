@@ -16,6 +16,8 @@ namespace Discord.Addons.Hosting
         /// </summary>
         /// <param name="cancellationToken">Triggered when <see cref="IHostedService"/> is stopped during startup.</param>
         public abstract Task InitializeAsync(CancellationToken cancellationToken);
+
+        /// <inheritdoc cref="IHostedService.StartAsync"/>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             if (_initialized) return;
@@ -23,6 +25,7 @@ namespace Discord.Addons.Hosting
             if (!cancellationToken.IsCancellationRequested) _initialized = true;
         }
 
+        /// <inheritdoc cref="IHostedService.StopAsync"/>
         public virtual Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask; 
     }
 }

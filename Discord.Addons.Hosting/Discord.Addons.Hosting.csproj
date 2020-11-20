@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net5</TargetFrameworks>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>3.1.0</Version>
+    <Version>3.1.1</Version>
     <Authors>Hawxy</Authors>
     <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -13,6 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
     <Copyright>Hawxy 2018-2021</Copyright>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
     <Nullable>Enable</Nullable>
   </PropertyGroup>
