@@ -9,15 +9,11 @@ This package provides extensions to a .NET Generic Host (IHostBuilder) that will
 Discord.Net 2.2.0+ & .NET Core 3.1+ is required.
 
 ```csharp
-var builder = new HostBuilder()               
-  .ConfigureAppConfiguration(x =>
-  {
-    //..configuration
-  })
-  .ConfigureLogging(x =>
-  {
-    //..logging
-  })
+var hostBuilder = Host.CreateDefaultBuilder()   
+  //..optionally add custom configuration            
+  .ConfigureAppConfiguration(x => { })
+  //..optionally configure logging
+  .ConfigureLogging(x => { })
   .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
   {
      config.SocketConfig = new DiscordSocketConfig
@@ -30,19 +26,18 @@ var builder = new HostBuilder()
     config.Token = context.Configuration["token"];
   })
   //Omit this if you don't use the command service
-  .UseCommandService()
+  .UseCommandService((context, config) =>
+  {
+	config.LogLevel = LogSeverity.Verbose;
+	config.DefaultRunMode = RunMode.Async;
+  })
   .ConfigureServices((context, services) =>
   {
     //Add any other services here
     services.AddHostedService<CommandHandler>();
-  })
-  .UseConsoleLifetime();
-
-var host = builder.Build();
-using (host)
-{
-  await host.RunAsync();
-}
+  });
+  
+await hostBuilder.RunConsoleAsync();
 ```
 
 ### Basic Usage
