@@ -17,23 +17,21 @@ namespace Sample.Simple
     {
         static async Task Main()
         {
-            var hostBuilder = new HostBuilder()
-                .ConfigureAppConfiguration(x =>
+            //CreateDefaultBuilder configures a lot of stuff for us automatically.
+            //See: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-5.0#default-builder-settings
+            var hostBuilder = Host.CreateDefaultBuilder() 
+                /*.ConfigureAppConfiguration(x =>
                 {
-                    //See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ for configuration source options
-                    var configuration = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", false, true)
-                        .Build();
-
-                    x.AddConfiguration(configuration);
+                    // The hostbuilder will load your settings from appsettings.json by default
+                    // You can add more configuration sources here if required.
+                    // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ for configuration source options
                 })
                 .ConfigureLogging(x =>
                 {
-                    //The default console logger doesn't have a great format, I recommend using a third-party one as is shown in the Serilog example
-                    x.AddConsole();
+                    // You can configure logging here.
+                    // The default console logger doesn't have a great format, I recommend using a third-party one as is shown in the Serilog example
                     x.SetMinimumLevel(LogLevel.Debug);
-                })
+                })*/
                 //Specify the type of discord.net client via the type parameter
                 .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
                 {

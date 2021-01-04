@@ -9,6 +9,8 @@ This package provides extensions to a .NET Generic Host (IHostBuilder) that will
 Discord.Net 2.2.0+ & .NET Core 3.1+ is required.
 
 ```csharp
+//CreateDefaultBuilder configures a lot of stuff for us automatically
+//See: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host
 var hostBuilder = Host.CreateDefaultBuilder()   
   //..optionally add custom configuration            
   .ConfigureAppConfiguration(x => { })
@@ -22,7 +24,7 @@ var hostBuilder = Host.CreateDefaultBuilder()
           AlwaysDownloadUsers = true,
           MessageCacheSize = 200
       };
-
+	//The host will load your configuration from appsettings.json automatically
     config.Token = context.Configuration["token"];
   })
   //Omit this if you don't use the command service
@@ -42,9 +44,10 @@ await hostBuilder.RunConsoleAsync();
 
 ### Basic Usage
 
-1. Create a .NET Core application (or retrofit your existing one).
+1. Create a .NET Core Console App (or retrofit your existing one).
 2. Add ```Discord.Addons.Hosting``` to your project.   
-3. Create and start your application using a HostBuilder as shown above and in the examples linked below.
+3. Add an `appsettings.json` with your token and prefix configuration, and ensure it's output when the project builds.
+4. Create and start your application using a HostBuilder as shown above and in the examples linked below.
 
 ### Examples
 
