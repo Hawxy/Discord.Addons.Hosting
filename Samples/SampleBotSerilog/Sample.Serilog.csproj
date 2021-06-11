@@ -1,29 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Commands" Version="2.2.0" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.2.0" />
+    <PackageReference Include="Discord.Net.Commands" Version="2.4.0" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.4.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Discord.Addons.Hosting\Discord.Addons.Hosting.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

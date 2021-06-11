@@ -27,7 +27,7 @@ namespace Sample.Serilog
             var hostBuilder = Host.CreateDefaultBuilder()
                 //Serilog.Extensions.Hosting is required. Don't use ConfigureLogging to add Serilog.
                 .UseSerilog()
-                .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
+                .ConfigureDiscordHost((context, config) =>
                 {
                     config.SocketConfig = new DiscordSocketConfig
                     {

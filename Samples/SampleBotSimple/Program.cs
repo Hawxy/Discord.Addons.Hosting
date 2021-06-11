@@ -33,7 +33,7 @@ namespace Sample.Simple
                     x.SetMinimumLevel(LogLevel.Debug);
                 })*/
                 //Specify the type of discord.net client via the type parameter
-                .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
+                .ConfigureDiscordHost((context, config) =>
                 {
                     config.SocketConfig = new DiscordSocketConfig
                     {
