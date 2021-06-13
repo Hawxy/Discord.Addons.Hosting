@@ -56,7 +56,7 @@ namespace Discord.Addons.Hosting
 
 
     /// <summary>
-    /// Base class for implementing an <see cref="DiscordClientService"/> with startup execution requirements.
+    /// Base class for implementing an <see cref="DiscordClientService"/> with startup execution requirements. This class implements <see cref="BackgroundService"/>
     /// </summary>
     public abstract class DiscordClientService : BackgroundService
     {

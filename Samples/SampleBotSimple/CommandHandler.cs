@@ -44,6 +44,8 @@ namespace Sample.Simple
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
+            Logger.LogInformation("User {user} attempted to use command {command}", context.User, command.Value.Name);
+
             if (!command.IsSpecified || result.IsSuccess)
                 return;
 
