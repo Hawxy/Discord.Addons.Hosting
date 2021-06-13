@@ -23,7 +23,7 @@ using Discord.WebSocket;
 namespace Discord.Addons.Hosting.Util
 {
     /// <summary>
-    /// Useful utilities for Discord.NET client
+    /// Utilities for the Discord.NET socket client
     /// </summary>
     public static class SocketClientExtensions
     {
@@ -36,7 +36,7 @@ namespace Discord.Addons.Hosting.Util
         public static Task WaitForReadyAsync(this DiscordSocketClient client, CancellationToken cancellationToken)
         {
             if (_tcs is null)
-                throw new InvalidOperationException("The socket client has not been registered correctly. Did you use ConfigureDiscordHost in your HostBuilder?");
+                throw new InvalidOperationException("The socket client has not been registered correctly. Did you use ConfigureDiscordHost on your HostBuilder?");
 
             if(_tcs.Task.IsCompleted)
                 return _tcs.Task;
