@@ -7,8 +7,7 @@
 	<ItemGroup>
 		<PackageReference Include="Discord.Net.Commands" Version="2.4.0" />
 		<PackageReference Include="Discord.Net.WebSocket" Version="2.4.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
 	</ItemGroup>

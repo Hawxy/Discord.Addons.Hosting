@@ -67,6 +67,7 @@ namespace Sample.Serilog
                 .ConfigureServices((context, services) =>
                 {
                     services.AddHostedService<CommandHandler>();
+                    services.AddHostedService<BotStatusService>();
                 });
     }
 }
