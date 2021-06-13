@@ -15,6 +15,8 @@
    limitations under the License.
  */
 #endregion
+
+using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Options;
 
@@ -24,6 +26,7 @@ namespace Discord.Addons.Hosting.Injectables
     {
         public InjectableDiscordSocketClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.SocketConfig)
         {
+            this.RegisterSocketClientReady();
         }
     }
 
