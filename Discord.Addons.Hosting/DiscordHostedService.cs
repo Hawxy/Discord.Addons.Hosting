@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2020 Hawxy
+   Copyright 2021 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -30,10 +30,10 @@ namespace Discord.Addons.Hosting
     internal class DiscordHostedService : IHostedService
     {
         private readonly ILogger<DiscordHostedService> _logger;
-        private readonly DiscordSocketClient _client;
+        private readonly BaseSocketClient _client;
         private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, DiscordSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, BaseSocketClient client)
         {
             _logger = logger;
             _config = options.Value;

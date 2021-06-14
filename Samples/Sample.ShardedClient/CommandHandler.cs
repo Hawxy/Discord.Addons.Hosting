@@ -9,15 +9,15 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Sample.Simple
+namespace Sample.ShardedClient
 {
-    public class CommandHandler : DiscordClientService
+    public class CommandHandler : DiscordShardedClientService
     {
         private readonly IServiceProvider _provider;
         private readonly CommandService _commandService;
         private readonly IConfiguration _config;
 
-        public CommandHandler(DiscordSocketClient client, ILogger<CommandHandler> logger,  IServiceProvider provider, CommandService commandService, IConfiguration config) : base(client, logger)
+        public CommandHandler(DiscordShardedClient client, ILogger<CommandHandler> logger,  IServiceProvider provider, CommandService commandService, IConfiguration config) : base(client, logger)
         {
             _provider = provider;
             _commandService = commandService;
@@ -38,7 +38,8 @@ namespace Sample.Simple
             int argPos = 0;
             if (!message.HasStringPrefix(_config["Prefix"], ref argPos) && !message.HasMentionPrefix(Client.CurrentUser, ref argPos)) return;
 
-            var context = new SocketCommandContext(Client, message);
+            var context = new ShardedCommandContext(Client, message);
+
             await _commandService.ExecuteAsync(context, argPos, _provider);
         }
 

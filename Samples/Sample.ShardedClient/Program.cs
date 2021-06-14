@@ -4,7 +4,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sample.Serilog;
+using Sample.ShardedClient;
 
 namespace Sample.Simple
 {
@@ -17,13 +17,14 @@ namespace Sample.Simple
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureDiscordHost((context, config) =>
+                .ConfigureDiscordShardedHost((context, config) =>
                 {
                     config.SocketConfig = new DiscordSocketConfig
                     {
                         LogLevel = LogSeverity.Verbose,
                         AlwaysDownloadUsers = true,
-                        MessageCacheSize = 200
+                        MessageCacheSize = 200,
+                        TotalShards = 4
                     };
 
                     config.Token = context.Configuration["Token"];
@@ -39,7 +40,6 @@ namespace Sample.Simple
                     //Add any other services here
                     services.AddHostedService<CommandHandler>();
                     services.AddHostedService<BotStatusService>();
-                    services.AddHostedService<LongRunningService>();
                 });
     }
 }

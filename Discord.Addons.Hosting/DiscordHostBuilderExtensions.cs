@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2020 Hawxy
+   Copyright 2021 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 using System;
 using System.Linq;
+using Discord.Addons.Hosting.Injectables;
 using Discord.Addons.Hosting.Util;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -32,37 +33,65 @@ namespace Discord.Addons.Hosting
     public static class DiscordHostBuilderExtensions
     {
         /// <summary>
-        /// Adds and optionally configures a Discord.Net hosted instance of type <typeparamref name="T"/>
+        /// Adds and optionally configures a <see cref="DiscordShardedClient"/> along with the required services.
         /// </summary>
         /// <remarks>
         /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
         /// </remarks>
-        /// <typeparam name="T">The type of Discord.Net client. Type must be or inherit from <see cref="DiscordSocketClient"/></typeparam>
         /// <param name="builder">The host builder to configure.</param>
         /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
         /// <returns>The generic host builder.</returns>
         /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-        public static IHostBuilder ConfigureDiscordHost<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T : DiscordSocketClient
+        public static IHostBuilder ConfigureDiscordShardedHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null)
         {
-            builder.ConfigureServices((context, collection) =>
-            {
-                if (collection.Any(x => x.ServiceType == typeof(DiscordSocketClient)))
-                    throw new InvalidOperationException($"Cannot add more than one Discord Client to host");
+            builder.ConfigureDiscordHostInternal(config);
 
+            return builder.ConfigureServices((_, collection) =>
+            {
+                if (collection.Any(x => x.ServiceType == typeof(BaseSocketClient)))
+                    throw new InvalidOperationException("Cannot add more than one Discord Client to host");
+
+                collection.AddSingleton<DiscordShardedClient, InjectableDiscordShardedClient>();
+                collection.AddSingleton<BaseSocketClient>(x => x.GetRequiredService<DiscordShardedClient>());
+            });
+        }
+
+        /// <summary>
+        /// Adds and optionally configures a <see cref="DiscordSocketClient"/> along with the required services.
+        /// </summary>
+        /// <remarks>
+        /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
+        /// </remarks>
+        /// <param name="builder">The host builder to configure.</param>
+        /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
+        /// <returns>The generic host builder.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
+        public static IHostBuilder ConfigureDiscordHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null)
+        {
+            builder.ConfigureDiscordHostInternal(config);
+
+            return builder.ConfigureServices((_, collection) =>
+            {
+                if (collection.Any(x => x.ServiceType == typeof(BaseSocketClient)))
+                    throw new InvalidOperationException("Cannot add more than one Discord Client to host");
+
+                collection.AddSingleton<DiscordSocketClient, InjectableDiscordSocketClient>();
+                collection.AddSingleton<BaseSocketClient>(x => x.GetRequiredService<DiscordSocketClient>());
+            });
+        }
+
+        private static IHostBuilder ConfigureDiscordHostInternal(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null)
+        {
+            return builder.ConfigureServices((context, collection) =>
+            {
                 collection.AddOptions<DiscordHostConfiguration>().Validate(x => ValidateToken(x.Token));
 
                 if (config != null)
                     collection.Configure<DiscordHostConfiguration>(x => config(context, x));
-
-                collection.AddSingleton(x=> (T)Activator.CreateInstance(typeof(T), x.GetRequiredService<IOptions<DiscordHostConfiguration>>().Value.SocketConfig)!);
-                if(typeof(T) != typeof(DiscordSocketClient))
-                    collection.AddSingleton<DiscordSocketClient>(x => x.GetRequiredService<T>());
-
+                
                 collection.AddSingleton(typeof(LogAdapter<>));
                 collection.AddHostedService<DiscordHostedService>();
             });
-
-            return builder;
 
             static bool ValidateToken(string token)
             {
@@ -76,7 +105,6 @@ namespace Discord.Addons.Hosting
                     return false;
                 }
             }
-
         }
 
         /// <summary>
@@ -111,7 +139,7 @@ namespace Discord.Addons.Hosting
                 collection.Configure<CommandServiceConfig>(x => config(context, x));
 
                 collection.AddSingleton(x=> new CommandService(x.GetRequiredService<IOptions<CommandServiceConfig>>().Value));
-                collection.AddHostedService<CommandServiceInitializerHost>();
+                collection.AddHostedService<CommandServiceRegistrationHost>();
             });
 
             return builder;
