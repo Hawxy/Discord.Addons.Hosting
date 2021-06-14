@@ -29,7 +29,7 @@ namespace Discord.Addons.Hosting
     [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting release notes for more information.", DiagnosticId
  = "DAH001", UrlFormat = "https://github.com/Hawxy/Discord.Addons.Hosting/releases/")]
 #else
-    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting release notes for more information.")]
+    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting github repository for more information.")]
 #endif
     public abstract class InitializedService : IHostedService
     {
