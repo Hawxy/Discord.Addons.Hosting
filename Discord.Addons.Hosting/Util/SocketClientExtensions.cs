@@ -35,33 +35,31 @@ namespace Discord.Addons.Hosting.Util
         /// <returns></returns>
         public static Task WaitForReadyAsync(this DiscordSocketClient client, CancellationToken cancellationToken)
         {
-            if (_tcs is null)
+            if (_socketTcs is null)
                 throw new InvalidOperationException("The socket client has not been registered correctly. Did you use ConfigureDiscordHost on your HostBuilder?");
 
-            if(_tcs.Task.IsCompleted)
-                return _tcs.Task;
+            if(_socketTcs.Task.IsCompleted)
+                return _socketTcs.Task;
 
             var registration = cancellationToken.Register(
                 state => { ((TaskCompletionSource<object>)state!).TrySetResult(null!); },
-                _tcs);
+                _socketTcs);
 
-            return _tcs.Task.ContinueWith(_=> registration.DisposeAsync());
+            return _socketTcs.Task.ContinueWith(_=> registration.DisposeAsync());
         }
 
-        private static TaskCompletionSource<object>? _tcs;
+        private static TaskCompletionSource<object>? _socketTcs;
         internal static void RegisterSocketClientReady(this DiscordSocketClient client)
         {
-            _tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _socketTcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
             client.Ready += ClientReady;
 
             Task ClientReady()
             {
-                _tcs!.TrySetResult(null!);
+                _socketTcs!.TrySetResult(null!);
                 client.Ready -= ClientReady;
                 return Task.CompletedTask;
             }
         }
     }
-
-    
 }

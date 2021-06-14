@@ -19,7 +19,7 @@ namespace Sample.Serilog
         private readonly CommandService _commandService;
         private readonly IConfiguration _config;
 
-        public CommandHandler(ILogger<CommandHandler> logger, DiscordSocketClient client, IServiceProvider provider, CommandService commandService, IConfiguration config) : base(logger, client)
+        public CommandHandler(DiscordSocketClient client, ILogger<CommandHandler> logger, IServiceProvider provider, CommandService commandService, IConfiguration config) : base(client, logger)
         {
             _provider = provider;
             _commandService = commandService;

@@ -34,6 +34,7 @@ namespace Discord.Addons.Hosting.Injectables
     {
         public InjectableDiscordShardedClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.SocketConfig)
         {
+            this.RegisterShardedClientReady();
         }
     }
 }

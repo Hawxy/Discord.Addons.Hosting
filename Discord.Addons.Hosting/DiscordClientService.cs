@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
    Copyright 2021 Hawxy
 
@@ -14,8 +15,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+
 #endregion
-using System;
+
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,46 +26,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Discord.Addons.Hosting
 {
-    /// <summary>
-    /// Base class for implementing an <see cref="IHostedService"/> with one-time setup requirements.
-    /// </summary>
-#if NET
-    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting release notes for more information.", DiagnosticId = "DAH001", UrlFormat = "https://github.com/Hawxy/Discord.Addons.Hosting/releases/")]
-#else
-    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting release notes for more information.")]
-#endif
-    public abstract class InitializedService : IHostedService
-    {
-        private bool _initialized;
-
-        /// <summary>
-        /// This method is called when the <see cref="IHostedService"/> starts for the first time.
-        /// </summary>
-        /// <param name="cancellationToken">Triggered when <see cref="IHostedService"/> is stopped during startup.</param>
-        public abstract Task InitializeAsync(CancellationToken cancellationToken);
-
-        /// <inheritdoc cref="IHostedService.StartAsync"/>
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            if (_initialized) return;
-            await InitializeAsync(cancellationToken);
-            if (!cancellationToken.IsCancellationRequested) _initialized = true;
-        }
-
-        /// <inheritdoc cref="IHostedService.StopAsync"/>
-        public virtual Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask; 
-    }
-
 
     /// <summary>
     /// Base class for implementing an <see cref="DiscordClientService"/> with startup execution requirements. This class implements <see cref="BackgroundService"/>
     /// </summary>
-    public abstract class DiscordClientService : BackgroundService
+    public abstract class DiscordServiceBase<T> : BackgroundService where T : BaseSocketClient
     {
         /// <summary>
         /// The running Discord.NET Client
         /// </summary>
-        protected DiscordSocketClient Client { get; }
+        protected T Client { get; }
+
         /// <summary>
         /// This service's logger
         /// </summary>
@@ -74,7 +47,7 @@ namespace Discord.Addons.Hosting
         /// </summary>
         /// <param name="logger">The logger for this service</param>
         /// <param name="client">The discord client</param>
-        protected DiscordClientService(ILogger<DiscordClientService> logger, DiscordSocketClient client)
+        protected DiscordServiceBase(T client, ILogger logger)
         {
             Client = client;
             Logger = logger;
@@ -88,6 +61,38 @@ namespace Discord.Addons.Hosting
         /// <param name="stoppingToken">Triggered when <see cref="IHostedService.StopAsync(CancellationToken)"/> is called.</param>
         /// <returns>A <see cref="Task"/> that represents the long running operations.</returns>
         protected abstract override Task ExecuteAsync(CancellationToken stoppingToken);
+    }
 
+    /// <summary>
+    /// Base class for implementing an <see cref="DiscordClientService"/> for a <see cref="DiscordShardedClient"/> with startup execution requirements.
+    /// This class implements <see cref="BackgroundService"/> and should be registered in your service collection with `AddHostedService`
+    /// </summary>
+    public abstract class DiscordClientService : DiscordServiceBase<DiscordSocketClient>
+    {
+        /// <summary>
+        /// Creates a new <see cref="DiscordClientService" />
+        /// </summary>
+        /// <param name="logger">The logger for this service</param>
+        /// <param name="client">The discord client</param>
+        protected DiscordClientService(DiscordSocketClient client, ILogger<DiscordClientService> logger) : base(client, logger)
+        {
+        }
+
+    }
+
+    /// <summary>
+    /// Base class for implementing an <see cref="DiscordShardedClientService"/> for a <see cref="DiscordShardedClient"/> with startup execution requirements.
+    /// This class implements <see cref="BackgroundService"/> and should be registered in your service collection with `AddHostedService`
+    /// </summary>
+    public abstract class DiscordShardedClientService : DiscordServiceBase<DiscordShardedClient>
+    {
+        /// <summary>
+        /// Creates a new <see cref="DiscordClientService" />
+        /// </summary>
+        /// <param name="logger">The logger for this service</param>
+        /// <param name="client">The discord client</param>
+        protected DiscordShardedClientService(DiscordShardedClient client, ILogger<DiscordShardedClientService> logger) : base(client, logger)
+        {
+        }
     }
 }

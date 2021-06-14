@@ -6,11 +6,11 @@ using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace Sample.Serilog
+namespace Sample.ShardedClient
 {
-    public class BotStatusService : DiscordClientService
+    public class BotStatusService : DiscordShardedClientService
     {
-        public BotStatusService(DiscordSocketClient client, ILogger<DiscordClientService> logger) : base(client, logger)
+        public BotStatusService(DiscordShardedClient client, ILogger<BotStatusService> logger) : base(client, logger)
         {
         }
 
