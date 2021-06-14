@@ -27,7 +27,7 @@ namespace Sample.Simple
                         TotalShards = 4
                     };
 
-                    config.Token = context.Configuration["token"];
+                    config.Token = context.Configuration["Token"];
                 })
                 //Omit this if you don't use the command service
                 .UseCommandService((context, config) =>

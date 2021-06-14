@@ -54,7 +54,7 @@ namespace Sample.Serilog
                         MessageCacheSize = 200
                     };
 
-                    config.Token = context.Configuration["token"];
+                    config.Token = context.Configuration["Token"];
 
                     //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for Serilog usage
                     config.LogFormat = (message, exception) => $"{message.Source}: {message.Message}";
