@@ -27,13 +27,13 @@ using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting
 {
-    internal class DiscordHostedService : IHostedService
+    internal class DiscordHostedService<T> : IHostedService where T: BaseSocketClient
     {
-        private readonly ILogger<DiscordHostedService> _logger;
-        private readonly BaseSocketClient _client;
+        private readonly ILogger<DiscordHostedService<T>> _logger;
+        private readonly T _client;
         private readonly DiscordHostConfiguration _config;
 
-        public DiscordHostedService(ILogger<DiscordHostedService> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<DiscordSocketClient> adapter, BaseSocketClient client)
+        public DiscordHostedService(ILogger<DiscordHostedService<T>> logger, IOptions<DiscordHostConfiguration> options, LogAdapter<T> adapter, T client)
         {
             _logger = logger;
             _config = options.Value;

@@ -26,7 +26,7 @@ namespace Discord.Addons.Hosting
     /// Base class for implementing an <see cref="IHostedService"/> with one-time setup requirements.
     /// </summary>
 #if NET
-    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting release notes for more information.", DiagnosticId
+    [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting github repository for more information.", DiagnosticId
  = "DAH001", UrlFormat = "https://github.com/Hawxy/Discord.Addons.Hosting/releases/")]
 #else
     [Obsolete("Replace with DiscordClientService. See the Discord.Addons.Hosting github repository for more information.")]
