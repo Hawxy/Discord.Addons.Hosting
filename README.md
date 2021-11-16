@@ -4,7 +4,7 @@
 ![Nuget](https://img.shields.io/nuget/dt/Discord.Addons.Hosting?style=flat-square)
 | Discord.NET Fork | [Original](https://github.com/discord-net/Discord.Net) | [Labs](https://github.com/Discord-Net-Labs/Discord.Net-Labs)
 |---------------------|----------|-------------|
-| Nuget Version      | `4.0.2`   | `4.0.2-labs` |
+| Nuget Version      | `4.0.2`   | `4.0.3-labs` |
 
 [Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
 This package provides extensions to a .NET Generic Host (`IHostBuilder`) that will run a Discord.Net socket/sharded client as a controllable `IHostedService`. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
@@ -144,7 +144,7 @@ public class BotStatusService : DiscordClientService
 ```
 
 #### Additional notes: 
-- Services that do not require access to the Discord Client should use an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice) if the Discord client is not required.
+- Services that do not require access to the Discord Client should use an implementation of [BackgroundService](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/background-tasks-with-ihostedservice).
 
 - Services with complex startup & shutdown activities should implement `IHostedService` directly.
 
