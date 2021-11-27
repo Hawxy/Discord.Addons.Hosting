@@ -12,11 +12,15 @@ internal class InteractionHandler : DiscordClientService
 {
     private readonly IServiceProvider _provider;
     private readonly InteractionService _interactionService;
+    private readonly IHostEnvironment _environment;
+    private readonly IConfiguration _configuration;
 
-    public InteractionHandler(DiscordSocketClient client, ILogger<DiscordClientService> logger, IServiceProvider provider, InteractionService interactionService) : base(client, logger)
+    public InteractionHandler(DiscordSocketClient client, ILogger<DiscordClientService> logger, IServiceProvider provider, InteractionService interactionService, IHostEnvironment environment, IConfiguration configuration) : base(client, logger)
     {
         _provider = provider;
         _interactionService = interactionService;
+        _environment = environment;
+        _configuration = configuration;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,8 +36,11 @@ internal class InteractionHandler : DiscordClientService
         await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         await Client.WaitForReadyAsync(stoppingToken);
 
-       // await _interactionService.RegisterCommandsToGuildAsync();
-       // await _interactionService.RegisterCommandsGloballyAsync();
+        // If DOTNET_ENVIRONMENT is set to development, only register the commands to a single guild
+        if (_environment.IsDevelopment())
+            await _interactionService.RegisterCommandsToGuildAsync(_configuration.GetValue<ulong>("DevGuild"));
+        else
+            await _interactionService.RegisterCommandsGloballyAsync();
     }
 
     private Task ComponentCommandExecuted(ComponentCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
