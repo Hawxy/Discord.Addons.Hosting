@@ -17,16 +17,21 @@ var host = Host.CreateDefaultBuilder(args)
 
         config.Token = context.Configuration["Token"];
     })
-    //Omit this if you don't use the command service
     .UseCommandService((context, config) =>
     {
         config.DefaultRunMode = RunMode.Async;
         config.CaseSensitiveCommands = false;
     })
+    .UseInteractionService((context, config) =>
+    {
+        config.LogLevel = LogSeverity.Info;
+        config.UseCompiledLambda = true;
+    })
     .ConfigureServices((context, services) =>
     {
         //Add any other services here
         services.AddHostedService<CommandHandler>();
+        services.AddHostedService<InteractionHandler>();
         services.AddHostedService<BotStatusService>();
     }).Build();
 

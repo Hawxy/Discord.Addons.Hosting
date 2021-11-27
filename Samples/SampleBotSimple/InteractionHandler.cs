@@ -5,7 +5,7 @@ using Discord.Addons.Hosting.Util;
 using Discord.Interactions;
 using Discord.WebSocket;
 
-namespace Sample.Serilog;
+namespace Sample.Simple;
 
 // NOTE: This command handler is specifically for using InteractionService-based commands
 internal class InteractionHandler : DiscordClientService
@@ -31,9 +31,8 @@ internal class InteractionHandler : DiscordClientService
 
         await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         await Client.WaitForReadyAsync(stoppingToken);
-
-       // await _interactionService.RegisterCommandsToGuildAsync();
-       // await _interactionService.RegisterCommandsGloballyAsync();
+        //await _interactionService.RegisterCommandsToGuildAsync();
+        //await _interactionService.RegisterCommandsGloballyAsync();
     }
 
     private Task ComponentCommandExecuted(ComponentCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)

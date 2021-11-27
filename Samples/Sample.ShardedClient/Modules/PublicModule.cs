@@ -1,9 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
 
-namespace Sample.ShardedClient;
+namespace Sample.ShardedClient.Modules;
 
-public class PublicModule : ModuleBase<SocketCommandContext>
+public class PublicModule : ModuleBase<ShardedCommandContext>
 {
     private readonly ILogger<PublicModule> _logger;
     //You can inject the host. This is useful if you want to shutdown the host via a command, but be careful with it.

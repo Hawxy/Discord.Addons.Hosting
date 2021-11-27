@@ -79,9 +79,9 @@ public static class DiscordHostBuilderExtensions
         });
     }
 
-    private static IHostBuilder ConfigureDiscordHostInternal<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T: BaseSocketClient
+    private static void ConfigureDiscordHostInternal<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T: BaseSocketClient
     {
-        return builder.ConfigureServices((context, collection) =>
+        builder.ConfigureServices((context, collection) =>
         {
             collection.AddOptions<DiscordHostConfiguration>().Validate(x => ValidateToken(x.Token));
 
@@ -136,7 +136,7 @@ public static class DiscordHostBuilderExtensions
 
             collection.Configure<CommandServiceConfig>(x => config(context, x));
 
-            collection.AddSingleton(x=> new CommandService(x.GetRequiredService<IOptions<CommandServiceConfig>>().Value));
+            collection.AddSingleton<CommandService, InjectableCommandService>();
             collection.AddHostedService<CommandServiceRegistrationHost>();
         });
 
