@@ -6,7 +6,7 @@ using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace Sample.Serilog
+namespace Sample.Simple
 {
     public class BotStatusService : DiscordClientService
     {

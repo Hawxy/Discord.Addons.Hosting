@@ -4,9 +4,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sample.ShardedClient;
 
-namespace Sample.Simple
+namespace Sample.ShardedClient
 {
     class Program
     {

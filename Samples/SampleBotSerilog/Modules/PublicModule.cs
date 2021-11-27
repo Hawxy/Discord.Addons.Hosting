@@ -5,7 +5,7 @@ using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Sample.Serilog
+namespace Sample.Serilog.Modules
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
@@ -23,7 +23,7 @@ namespace Sample.Serilog
         [Alias("pong", "hello")]
         public async Task PingAsync()
         {
-            _logger.LogInformation($"User {Context.User.Username} used the ping command!");
+            _logger.LogInformation("User {user} used the ping command!", Context.User.Username);
             await ReplyAsync("pong!");
         }
 

@@ -4,15 +4,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Hosting;
-using Discord.Addons.Hosting.Util;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Serilog;
+using IResult = Discord.Commands.IResult;
 
 namespace Sample.Serilog
 {
+    // NOTE: This command handler is specifically for using traditional bot commands.
     public class CommandHandler : DiscordClientService
     {
         private readonly IServiceProvider _provider;

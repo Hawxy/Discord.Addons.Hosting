@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
    limitations under the License.
  */
 #endregion
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+
 using Discord.WebSocket;
 
 namespace Discord.Addons.Hosting.Util

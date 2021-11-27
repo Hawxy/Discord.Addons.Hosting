@@ -4,7 +4,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sample.Serilog;
 
 namespace Sample.Simple
 {

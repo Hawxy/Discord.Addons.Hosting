@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
    limitations under the License.
  */
 #endregion
-using System.Threading;
-using System.Threading.Tasks;
+
 using Discord.Addons.Hosting.Util;
 using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting.Services
 {
     internal class CommandServiceRegistrationHost : IHostedService
     {
@@ -40,7 +39,7 @@ namespace Discord.Addons.Hosting
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _commandService.Log += _adapter.Log;
-            _logger.LogDebug("Registered logger for CommandService");
+            _logger.LogInformation($"Registered logger for {nameof(CommandService)}");
             return Task.CompletedTask;
         }
 

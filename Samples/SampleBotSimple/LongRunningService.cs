@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.Addons.Hosting;
@@ -9,7 +6,7 @@ using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace Sample.Serilog
+namespace Sample.Simple
 {
     public class LongRunningService : DiscordClientService
     {

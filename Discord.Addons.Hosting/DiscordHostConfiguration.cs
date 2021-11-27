@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
    limitations under the License.
  */
 #endregion
-using System;
+
 using Discord.WebSocket;
 
 namespace Discord.Addons.Hosting
@@ -37,7 +37,7 @@ namespace Discord.Addons.Hosting
         /// <remarks>
         /// The default simply concatenates the message source with the log message.
         /// </remarks>
-        public Func<LogMessage, Exception, string> LogFormat { get; set; } = (message, exception) => $"{message.Source}: {message.Message}";
+        public Func<LogMessage, Exception?, string> LogFormat { get; set; } = (message, _) => $"{message.Source}: {message.Message}";
 
         /// <inheritdoc cref="DiscordSocketConfig"/>
         public DiscordSocketConfig SocketConfig { get; set; } = new DiscordSocketConfig();

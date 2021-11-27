@@ -61,12 +61,18 @@ namespace Sample.Serilog
                 })
                 .UseCommandService((context, config) =>
                 {
-                    config.LogLevel = LogSeverity.Verbose;
+                    config.LogLevel = LogSeverity.Info;
                     config.DefaultRunMode = RunMode.Async;
+                })
+                .UseInteractionService((context, config) =>
+                {
+                    config.LogLevel = LogSeverity.Info;
+                    config.UseCompiledLambda = true;
                 })
                 .ConfigureServices((context, services) =>
                 {
                     services.AddHostedService<CommandHandler>();
+                    services.AddHostedService<InteractionHandler>();
                     services.AddHostedService<BotStatusService>();
                 });
     }

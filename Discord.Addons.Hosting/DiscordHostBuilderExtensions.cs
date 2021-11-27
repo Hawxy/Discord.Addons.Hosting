@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
    limitations under the License.
  */
 #endregion
-using System;
-using System.Linq;
+
 using Discord.Addons.Hosting.Injectables;
+using Discord.Addons.Hosting.Services;
 using Discord.Addons.Hosting.Util;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -98,7 +99,7 @@ namespace Discord.Addons.Hosting
                     TokenUtils.ValidateToken(TokenType.Bot, token);
                     return true;
                 }
-                catch (Exception e) when (e is ArgumentNullException || e is ArgumentException)
+                catch (Exception e) when (e is ArgumentNullException or ArgumentException)
                 {
                     return false;
                 }
@@ -106,7 +107,7 @@ namespace Discord.Addons.Hosting
         }
 
         /// <summary>
-        /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.Net client. />
+        /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.NET client. />
         /// </summary>
         /// <param name="builder">The host builder to configure.</param> 
         /// <returns>The (generic) host builder.</returns>
@@ -114,7 +115,7 @@ namespace Discord.Addons.Hosting
         public static IHostBuilder UseCommandService(this IHostBuilder builder) => builder.UseCommandService((context, config) => { });
 
         /// <summary>
-        /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.Net client. />
+        /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.NET client. />
         /// </summary>
         /// <remarks>
         /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
@@ -126,8 +127,7 @@ namespace Discord.Addons.Hosting
         /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
         public static IHostBuilder UseCommandService(this IHostBuilder builder, Action<HostBuilderContext, CommandServiceConfig> config)
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
+            ArgumentNullException.ThrowIfNull(config);
 
             builder.ConfigureServices((context, collection) =>
             {
@@ -138,6 +138,44 @@ namespace Discord.Addons.Hosting
 
                 collection.AddSingleton(x=> new CommandService(x.GetRequiredService<IOptions<CommandServiceConfig>>().Value));
                 collection.AddHostedService<CommandServiceRegistrationHost>();
+            });
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="InteractionService"/> instance to the host for use with a Discord.NET client. />
+        /// </summary>
+        /// <param name="builder">The host builder to configure.</param> 
+        /// <returns>The (generic) host builder.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
+        public static IHostBuilder UseInteractionService(this IHostBuilder builder) => builder.UseCommandService((context, config) => { });
+
+
+        /// <summary>
+        /// Adds a <see cref="InteractionService"/> instance to the host for use with a Discord.NET client. />
+        /// </summary>
+        /// <remarks>
+        /// A <see cref="HostBuilderContext"/> is supplied so that the configuration and service provider can be used.
+        /// </remarks>
+        /// <param name="builder">The host builder to configure.</param>
+        /// <param name="config">The delegate for configuring the <see cref="InteractionServiceConfig" /> that will be used to initialise the service.</param>
+        /// <returns>The (generic) host builder.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
+        /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
+        public static IHostBuilder UseInteractionService(this IHostBuilder builder, Action<HostBuilderContext, InteractionServiceConfig> config)
+        {
+            ArgumentNullException.ThrowIfNull(config);
+
+            builder.ConfigureServices((context, collection) =>
+            {
+                if (collection.Any(x => x.ServiceType == typeof(InteractionService)))
+                    throw new InvalidOperationException("Cannot add more than one InteractionService to host");
+
+                collection.Configure<InteractionServiceConfig>(x => config(context, x));
+
+                collection.AddSingleton<InteractionService, InjectableInteractionsService>();
+                collection.AddHostedService<InteractionServiceRegistrationHost>();
             });
 
             return builder;

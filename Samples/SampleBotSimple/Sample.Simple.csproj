@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>5751e5fb-2beb-463c-bdb7-03e8e997481b</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Discord.Net.Commands" Version="2.4.0" />
-		<PackageReference Include="Discord.Net.WebSocket" Version="2.4.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

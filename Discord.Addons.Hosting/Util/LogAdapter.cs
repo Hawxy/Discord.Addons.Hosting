@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
  */
 #endregion
 
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -26,7 +24,7 @@ namespace Discord.Addons.Hosting.Util
     internal class LogAdapter<T> where T: class
     {
         private readonly ILogger<T> _logger;
-        private readonly Func<LogMessage, Exception, string> _formatter;
+        private readonly Func<LogMessage, Exception?, string> _formatter;
        
         public LogAdapter(ILogger<T> logger, IOptions<DiscordHostConfiguration> options)
         {

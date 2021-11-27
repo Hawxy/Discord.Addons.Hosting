@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,16 +16,13 @@
  */
 #endregion
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Discord.Addons.Hosting.Util;
 using Discord.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting.Services
 {
     internal class DiscordHostedService<T> : IHostedService where T: BaseSocketClient
     {
@@ -47,8 +44,8 @@ namespace Discord.Addons.Hosting
             
             try
             {
-                await _client.LoginAsync(TokenType.Bot, _config.Token).WithCancellation(cancellationToken);
-                await _client.StartAsync().WithCancellation(cancellationToken);
+                await _client.LoginAsync(TokenType.Bot, _config.Token).WaitAsync(cancellationToken);
+                await _client.StartAsync().WaitAsync(cancellationToken);
             }
             catch (OperationCanceledException)
             {
@@ -61,7 +58,7 @@ namespace Discord.Addons.Hosting
             _logger.LogInformation("Discord.NET hosted service is stopping");
             try
             {
-                await _client.StopAsync().WithCancellation(cancellationToken);
+                await _client.StopAsync().WaitAsync(cancellationToken);
             }
             catch (OperationCanceledException)
             {
