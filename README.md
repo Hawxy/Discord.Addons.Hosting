@@ -27,14 +27,14 @@ var host = Host.CreateDefaultBuilder()
 
         config.Token = context.Configuration["token"];
     })
-	// Optionally wire up the command service
+    // Optionally wire up the command service
     .UseCommandService((context, config) =>
     {
         config.DefaultRunMode = RunMode.Async;
         config.CaseSensitiveCommands = false;
     })
-	// Optionally wire up the interactions service
-	.UseInteractionService((context, config) =>
+    // Optionally wire up the interactions service
+    .UseInteractionService((context, config) =>
     {
         config.LogLevel = LogSeverity.Info;
         config.UseCompiledLambda = true;
