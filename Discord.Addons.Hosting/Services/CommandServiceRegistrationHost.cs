@@ -21,28 +21,27 @@ using Discord.Commands;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Discord.Addons.Hosting.Services
+namespace Discord.Addons.Hosting.Services;
+
+internal class CommandServiceRegistrationHost : IHostedService
 {
-    internal class CommandServiceRegistrationHost : IHostedService
+    private readonly CommandService _commandService;
+    private readonly ILogger<CommandServiceRegistrationHost> _logger;
+    private readonly LogAdapter<CommandService> _adapter;
+
+    public CommandServiceRegistrationHost(CommandService commandService, ILogger<CommandServiceRegistrationHost> logger, LogAdapter<CommandService> adapter)
     {
-        private readonly CommandService _commandService;
-        private readonly ILogger<CommandServiceRegistrationHost> _logger;
-        private readonly LogAdapter<CommandService> _adapter;
-
-        public CommandServiceRegistrationHost(CommandService commandService, ILogger<CommandServiceRegistrationHost> logger, LogAdapter<CommandService> adapter)
-        {
-            _commandService = commandService;
-            _logger = logger;
-            _adapter = adapter;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _commandService.Log += _adapter.Log;
-            _logger.LogInformation($"Registered logger for {nameof(CommandService)}");
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        _commandService = commandService;
+        _logger = logger;
+        _adapter = adapter;
     }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _commandService.Log += _adapter.Log;
+        _logger.LogInformation($"Registered logger for {nameof(CommandService)}");
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

@@ -18,11 +18,10 @@
 using Discord.Commands;
 using Microsoft.Extensions.Options;
 
-namespace Discord.Addons.Hosting.Injectables
-{
-    internal class InjectableCommandService : CommandService
-    {
-        public InjectableCommandService(IOptions<CommandServiceConfig> config) : base(config.Value) {}
+namespace Discord.Addons.Hosting.Injectables;
 
-    }
+internal class InjectableCommandService : CommandService
+{
+    public InjectableCommandService(IOptions<CommandServiceConfig> config) : base(config.Value) {}
+
 }

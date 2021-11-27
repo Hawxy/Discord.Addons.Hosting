@@ -19,16 +19,15 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.Options;
 
-namespace Discord.Addons.Hosting.Injectables
-{
-    internal class InjectableInteractionsService : InteractionService
-    {
-        public InjectableInteractionsService(DiscordSocketClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
-        {
-        }
+namespace Discord.Addons.Hosting.Injectables;
 
-        public InjectableInteractionsService(DiscordShardedClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
-        {
-        }
+internal class InjectableInteractionsService : InteractionService
+{
+    public InjectableInteractionsService(DiscordSocketClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
+    {
+    }
+
+    public InjectableInteractionsService(DiscordShardedClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
+    {
     }
 }

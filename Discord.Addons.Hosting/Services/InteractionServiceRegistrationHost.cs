@@ -21,29 +21,28 @@ using Discord.Interactions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Discord.Addons.Hosting.Services
+namespace Discord.Addons.Hosting.Services;
+
+internal class InteractionServiceRegistrationHost : IHostedService
 {
-    internal class InteractionServiceRegistrationHost : IHostedService
+    private readonly InteractionService _interactionService;
+    private readonly ILogger<InteractionServiceRegistrationHost> _logger;
+    private readonly LogAdapter<InteractionService> _adapter;
+
+    public InteractionServiceRegistrationHost(InteractionService interactionService, ILogger<InteractionServiceRegistrationHost> logger, LogAdapter<InteractionService> adapter)
     {
-        private readonly InteractionService _interactionService;
-        private readonly ILogger<InteractionServiceRegistrationHost> _logger;
-        private readonly LogAdapter<InteractionService> _adapter;
-
-        public InteractionServiceRegistrationHost(InteractionService interactionService, ILogger<InteractionServiceRegistrationHost> logger, LogAdapter<InteractionService> adapter)
-        {
-            _interactionService = interactionService;
-            _logger = logger;
-            _adapter = adapter;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _interactionService.Log += _adapter.Log;
-            _logger.LogInformation($"Registered logger for {nameof(InteractionService)}");
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-
+        _interactionService = interactionService;
+        _logger = logger;
+        _adapter = adapter;
     }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _interactionService.Log += _adapter.Log;
+        _logger.LogInformation($"Registered logger for {nameof(InteractionService)}");
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
 }

@@ -18,28 +18,26 @@
 
 using Discord.WebSocket;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting;
+
+/// <summary>
+/// Configuration passed to the hosted service
+/// </summary>
+public class DiscordHostConfiguration
 {
 
     /// <summary>
-    /// Configuration passed to the hosted service
+    /// The bots token.
     /// </summary>
-    public class DiscordHostConfiguration
-    {
+    public string Token { get; set; } = string.Empty;
+    /// <summary>
+    /// Sets a custom output format for logs coming from Discord.NET's integrated logger.
+    /// </summary>
+    /// <remarks>
+    /// The default simply concatenates the message source with the log message.
+    /// </remarks>
+    public Func<LogMessage, Exception?, string> LogFormat { get; set; } = (message, _) => $"{message.Source}: {message.Message}";
 
-        /// <summary>
-        /// The bots token.
-        /// </summary>
-        public string Token { get; set; } = string.Empty;
-        /// <summary>
-        /// Sets a custom output format for logs coming from Discord.NET's integrated logger.
-        /// </summary>
-        /// <remarks>
-        /// The default simply concatenates the message source with the log message.
-        /// </remarks>
-        public Func<LogMessage, Exception?, string> LogFormat { get; set; } = (message, _) => $"{message.Source}: {message.Message}";
-
-        /// <inheritdoc cref="DiscordSocketConfig"/>
-        public DiscordSocketConfig SocketConfig { get; set; } = new DiscordSocketConfig();
-    }
+    /// <inheritdoc cref="DiscordSocketConfig"/>
+    public DiscordSocketConfig SocketConfig { get; set; } = new DiscordSocketConfig();
 }
