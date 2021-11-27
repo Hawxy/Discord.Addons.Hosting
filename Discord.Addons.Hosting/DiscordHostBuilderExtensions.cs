@@ -174,7 +174,7 @@ public static class DiscordHostBuilderExtensions
 
             collection.Configure<InteractionServiceConfig>(x => config(context, x));
 
-            collection.AddSingleton<InteractionService, InjectableInteractionsService>();
+            collection.AddSingleton<InteractionService, InjectableInteractionService>();
             collection.AddHostedService<InteractionServiceRegistrationHost>();
         });
 

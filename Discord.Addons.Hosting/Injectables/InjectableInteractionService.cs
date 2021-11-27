@@ -21,13 +21,13 @@ using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting.Injectables;
 
-internal class InjectableInteractionsService : InteractionService
+internal class InjectableInteractionService : InteractionService
 {
-    public InjectableInteractionsService(DiscordSocketClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
+    public InjectableInteractionService(DiscordSocketClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
     {
     }
 
-    public InjectableInteractionsService(DiscordShardedClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
+    public InjectableInteractionService(DiscordShardedClient discord, IOptions<InteractionServiceConfig> config) : base(discord, config.Value)
     {
     }
 }
