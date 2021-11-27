@@ -149,7 +149,7 @@ public static class DiscordHostBuilderExtensions
     /// <param name="builder">The host builder to configure.</param> 
     /// <returns>The (generic) host builder.</returns>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
-    public static IHostBuilder UseInteractionService(this IHostBuilder builder) => builder.UseCommandService((context, config) => { });
+    public static IHostBuilder UseInteractionService(this IHostBuilder builder) => builder.UseInteractionService((context, config) => { });
 
 
     /// <summary>
