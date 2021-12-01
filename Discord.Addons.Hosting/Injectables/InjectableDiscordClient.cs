@@ -32,7 +32,7 @@ internal class InjectableDiscordSocketClient : DiscordSocketClient
 
 internal class InjectableDiscordShardedClient : DiscordShardedClient
 {
-    public InjectableDiscordShardedClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.SocketConfig)
+    public InjectableDiscordShardedClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.ShardIds, config.Value.SocketConfig)
     {
         this.RegisterShardedClientReady();
     }

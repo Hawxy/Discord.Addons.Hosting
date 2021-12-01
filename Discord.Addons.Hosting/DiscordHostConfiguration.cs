@@ -39,5 +39,10 @@ public class DiscordHostConfiguration
     public Func<LogMessage, Exception?, string> LogFormat { get; set; } = (message, _) => $"{message.Source}: {message.Message}";
 
     /// <inheritdoc cref="DiscordSocketConfig"/>
-    public DiscordSocketConfig SocketConfig { get; set; } = new DiscordSocketConfig();
+    public DiscordSocketConfig SocketConfig { get; set; } = new();
+
+    /// <summary>
+    /// Optional explicit shard ID(s) for the <see cref="DiscordShardedClient"/>
+    /// </summary>
+    public int[]? ShardIds { get; set; }
 }

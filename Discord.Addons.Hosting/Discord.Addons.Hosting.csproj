@@ -20,9 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Labs.Commands" Version="3.4.2" />
-    <PackageReference Include="Discord.Net.Labs.Interactions" Version="3.4.2" />
-    <PackageReference Include="Discord.Net.Labs.WebSocket" Version="3.4.2" />
+    <PackageReference Include="Discord.Net.Labs.Commands" Version="3.4.7" />
+    <PackageReference Include="Discord.Net.Labs.Interactions" Version="3.4.7" />
+    <PackageReference Include="Discord.Net.Labs.WebSocket" Version="3.4.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
   </ItemGroup>
 

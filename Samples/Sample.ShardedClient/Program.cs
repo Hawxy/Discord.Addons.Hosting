@@ -16,6 +16,8 @@ var host = Host.CreateDefaultBuilder(args)
         };
 
         config.Token = context.Configuration["Token"];
+
+        config.ShardIds = new[] { 1 };
     })
     .UseCommandService((context, config) =>
     {
