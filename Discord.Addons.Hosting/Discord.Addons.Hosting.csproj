@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>5.0.0-labs-alpha-01</Version>
+    <Version>5.0.0-labs-alpha-02</Version>
     <Authors>Hawxy</Authors>
     <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
