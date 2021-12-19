@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5751e5fb-2beb-463c-bdb7-03e8e997481b</UserSecretsId>
-	</PropertyGroup>
+  </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-	</ItemGroup>
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\Discord.Addons.Hosting\Discord.Addons.Hosting.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Discord.Addons.Hosting\Discord.Addons.Hosting.csproj" />
+  </ItemGroup>
 
 </Project>
