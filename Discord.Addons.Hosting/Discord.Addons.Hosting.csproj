@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>5.0.0-labs-alpha-02</Version>
+    <Version>5.0.0</Version>
     <Authors>Hawxy</Authors>
     <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -20,9 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Labs.Commands" Version="3.4.7" />
-    <PackageReference Include="Discord.Net.Labs.Interactions" Version="3.4.7" />
-    <PackageReference Include="Discord.Net.Labs.WebSocket" Version="3.4.7" />
+    <PackageReference Include="Discord.Net.Commands" Version="3.0.0" />
+    <PackageReference Include="Discord.Net.Interactions" Version="3.0.0" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
   </ItemGroup>
 
