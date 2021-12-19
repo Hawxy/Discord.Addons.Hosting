@@ -4,19 +4,18 @@
 ![Nuget](https://img.shields.io/nuget/dt/Discord.Addons.Hosting?style=flat-square)
 | Discord.NET Fork | [Original](https://github.com/discord-net/Discord.Net) | [Labs](https://github.com/Discord-Net-Labs/Discord.Net-Labs)
 |---------------------|----------|-------------|
-| Nuget Version      | `4.0.2`   | `4.0.3-labs` |
+| Nuget Version      | `5.0.0`   | `5.0.0-labs` |
 
-[Discord.Net](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
-This package provides extensions to a .NET Generic Host (`IHostBuilder`) that will run a Discord.Net socket/sharded client as a controllable `IHostedService`. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
+[Discord.NET](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
+This package provides extensions to a .NET Generic Host (`IHostBuilder`) that will run a Discord.NET socket/sharded client as a controllable `IHostedService`. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
 
 
-
-NET Core 3.1+ is required.
+.NET  6.0+ is required.
 
 ```csharp
 // CreateDefaultBuilder configures a lot of stuff for us automatically
 // See: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host
-var hostBuilder = Host.CreateDefaultBuilder()   
+var host = Host.CreateDefaultBuilder()   
     .ConfigureDiscordHost((context, config) =>
     {
         config.SocketConfig = new DiscordSocketConfig
@@ -28,10 +27,17 @@ var hostBuilder = Host.CreateDefaultBuilder()
 
         config.Token = context.Configuration["token"];
     })
+    // Optionally wire up the command service
     .UseCommandService((context, config) =>
     {
         config.DefaultRunMode = RunMode.Async;
         config.CaseSensitiveCommands = false;
+    })
+    // Optionally wire up the interactions service
+    .UseInteractionService((context, config) =>
+    {
+        config.LogLevel = LogSeverity.Info;
+        config.UseCompiledLambda = true;
     })
     .ConfigureServices((context, services) =>
     {
@@ -39,18 +45,19 @@ var hostBuilder = Host.CreateDefaultBuilder()
         services.AddHostedService<CommandHandler>();
         services.AddHostedService<BotStatusService>();
         services.AddHostedService<LongRunningService>();
-    });
+    }).Build();
   
-await hostBuilder.RunConsoleAsync();
+await host.RunAsync();
 ```
 
 ## Getting Started
 
-1. Create a [.NET 5 Worker Service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-5.0&tabs=visual-studio#worker-service-template) using Visual Studio or via the dotnet cli (`dotnet new worker -o MyWorkerService`)
+1. Create a [.NET 6 Worker Service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-6.0&tabs=visual-studio#worker-service-template) using Visual Studio or via the dotnet cli (`dotnet new worker -o MyWorkerService`)
 2. Add ```Discord.Addons.Hosting``` to your project.   
-3. Set your bot token via the [dotnet secrets manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows#set-a-secret): `dotnet user-secrets set "token" "your-token-here"`
+3. Set your bot token via the [dotnet secrets manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#set-a-secret): `dotnet user-secrets set "token" "your-token-here"`
 4. Add your bot prefix to `appsettings.json`
 5. Configure your Discord client with `ConfigureDiscordHost`.
+6. Enable the `CommandService` and/or the `InteractionService` with `UseCommandService` and `UseInteractionService`
 6. Create and start your application using a HostBuilder as shown above and in the examples linked below.
 
 ## Examples

@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 
-namespace Sample.Simple;
+namespace Sample.Serilog.Modules;
 
 public class PublicModule : ModuleBase<SocketCommandContext>
 {

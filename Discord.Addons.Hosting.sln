@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord.Addons.Hosting", "Discord.Addons.Hosting\Discord.Addons.Hosting.csproj", "{03ED5619-5F9E-4CC6-8B8F-7D610C3169EB}"
 EndProject
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Serilog", "Samples\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Simple", "Samples\SampleBotSimple\Sample.Simple.csproj", "{E65C387F-9D99-4257-A458-1F6D5A4D80F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.ShardedClient", "Samples\Sample.ShardedClient\Sample.ShardedClient.csproj", "{540A37B5-E304-49A4-B68E-08941C0D33F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.ShardedClient", "Samples\Sample.ShardedClient\Sample.ShardedClient.csproj", "{540A37B5-E304-49A4-B68E-08941C0D33F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

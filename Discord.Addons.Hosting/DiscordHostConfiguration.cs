@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2021 Hawxy
+   Copyright 2019-2022 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,31 +15,34 @@
    limitations under the License.
  */
 #endregion
-using System;
+
 using Discord.WebSocket;
 
-namespace Discord.Addons.Hosting
+namespace Discord.Addons.Hosting;
+
+/// <summary>
+/// Configuration passed to the hosted service
+/// </summary>
+public class DiscordHostConfiguration
 {
 
     /// <summary>
-    /// Configuration passed to the hosted service
+    /// The bots token.
     /// </summary>
-    public class DiscordHostConfiguration
-    {
+    public string Token { get; set; } = string.Empty;
+    /// <summary>
+    /// Sets a custom output format for logs coming from Discord.NET's integrated logger.
+    /// </summary>
+    /// <remarks>
+    /// The default simply concatenates the message source with the log message.
+    /// </remarks>
+    public Func<LogMessage, Exception?, string> LogFormat { get; set; } = (message, _) => $"{message.Source}: {message.Message}";
 
-        /// <summary>
-        /// The bots token.
-        /// </summary>
-        public string Token { get; set; } = string.Empty;
-        /// <summary>
-        /// Sets a custom output format for logs coming from Discord.NET's integrated logger.
-        /// </summary>
-        /// <remarks>
-        /// The default simply concatenates the message source with the log message.
-        /// </remarks>
-        public Func<LogMessage, Exception, string> LogFormat { get; set; } = (message, exception) => $"{message.Source}: {message.Message}";
+    /// <inheritdoc cref="DiscordSocketConfig"/>
+    public DiscordSocketConfig SocketConfig { get; set; } = new();
 
-        /// <inheritdoc cref="DiscordSocketConfig"/>
-        public DiscordSocketConfig SocketConfig { get; set; } = new DiscordSocketConfig();
-    }
+    /// <summary>
+    /// Optional explicit shard ID(s) for the <see cref="DiscordShardedClient"/>
+    /// </summary>
+    public int[]? ShardIds { get; set; }
 }

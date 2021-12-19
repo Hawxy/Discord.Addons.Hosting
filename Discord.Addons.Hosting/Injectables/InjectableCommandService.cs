@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 /*
    Copyright 2019-2022 Hawxy
 
@@ -15,25 +15,13 @@
    limitations under the License.
  */
 #endregion
-
-using Discord.Addons.Hosting.Util;
-using Discord.WebSocket;
+using Discord.Commands;
 using Microsoft.Extensions.Options;
 
 namespace Discord.Addons.Hosting.Injectables;
 
-internal class InjectableDiscordSocketClient : DiscordSocketClient 
+internal class InjectableCommandService : CommandService
 {
-    public InjectableDiscordSocketClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.SocketConfig)
-    {
-        this.RegisterSocketClientReady();
-    }
-}
+    public InjectableCommandService(IOptions<CommandServiceConfig> config) : base(config.Value) {}
 
-internal class InjectableDiscordShardedClient : DiscordShardedClient
-{
-    public InjectableDiscordShardedClient(IOptions<DiscordHostConfiguration> config) : base(config.Value.ShardIds, config.Value.SocketConfig)
-    {
-        this.RegisterShardedClientReady();
-    }
 }
