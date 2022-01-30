@@ -44,11 +44,11 @@ internal class InteractionHandler : DiscordClientService
 
     }
 
-    private Task ComponentCommandExecuted(ComponentCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+    private Task ComponentCommandExecuted(ComponentCommandInfo commandInfo, IInteractionContext context, IResult result)
     {
-        if (!arg3.IsSuccess)
+        if (!result.IsSuccess)
         {
-            switch (arg3.Error)
+            switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
                     // implement
@@ -73,11 +73,11 @@ internal class InteractionHandler : DiscordClientService
         return Task.CompletedTask;
     }
 
-    private Task ContextCommandExecuted(ContextCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+    private Task ContextCommandExecuted(ContextCommandInfo context, IInteractionContext arg2, IResult result)
     {
-        if (!arg3.IsSuccess)
+        if (!result.IsSuccess)
         {
-            switch (arg3.Error)
+            switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
                     // implement
@@ -102,11 +102,11 @@ internal class InteractionHandler : DiscordClientService
         return Task.CompletedTask;
     }
 
-    private Task SlashCommandExecuted(SlashCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+    private Task SlashCommandExecuted(SlashCommandInfo commandInfo, IInteractionContext context, IResult result)
     {
-        if (!arg3.IsSuccess)
+        if (!result.IsSuccess)
         {
-            switch (arg3.Error)
+            switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
                     // implement
@@ -130,8 +130,6 @@ internal class InteractionHandler : DiscordClientService
 
         return Task.CompletedTask;
     }
-
-
     private async Task HandleInteraction(SocketInteraction arg)
     {
         try
