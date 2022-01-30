@@ -17,6 +17,7 @@
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
     <Nullable>Enable</Nullable>
     <ImplicitUsings>Enable</ImplicitUsings>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <None Include="Images\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

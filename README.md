@@ -2,6 +2,7 @@
 ![.NET Core Build](https://github.com/Hawxy/Discord.Addons.Hosting/workflows/.NET%20Core%20Build/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 ![Nuget](https://img.shields.io/nuget/dt/Discord.Addons.Hosting?style=flat-square)
+
 | Discord.NET Fork | [Original](https://github.com/discord-net/Discord.Net) | [Labs](https://github.com/Discord-Net-Labs/Discord.Net-Labs)
 |---------------------|----------|-------------|
 | Nuget Version      | `5.1.0`   | `5.1.0-labs` |
