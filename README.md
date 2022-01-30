@@ -2,9 +2,10 @@
 ![.NET Core Build](https://github.com/Hawxy/Discord.Addons.Hosting/workflows/.NET%20Core%20Build/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 ![Nuget](https://img.shields.io/nuget/dt/Discord.Addons.Hosting?style=flat-square)
+
 | Discord.NET Fork | [Original](https://github.com/discord-net/Discord.Net) | [Labs](https://github.com/Discord-Net-Labs/Discord.Net-Labs)
 |---------------------|----------|-------------|
-| Nuget Version      | `5.0.0`   | `5.0.0-labs` |
+| Nuget Version      | `5.1.0`   | `5.1.0-labs` |
 
 [Discord.NET](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
 This package provides extensions to a .NET Generic Host (`IHostBuilder`) that will run a Discord.NET socket/sharded client as a controllable `IHostedService`. This simplifies initial bot creation and moves the usual boilerplate to a convenient builder pattern.
