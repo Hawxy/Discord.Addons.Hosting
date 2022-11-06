@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <PackageId>Discord.Addons.Hosting</PackageId>
-    <Version>5.1.0</Version>
+    <Version>5.2.0</Version>
     <Authors>Hawxy</Authors>
     <Description>Simplifying Discord.Net hosting with .NET Generic Host (Microsoft.Extensions.Hosting)</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
-    <Copyright>Hawxy 2018-2022</Copyright>
+    <Copyright>Hawxy 2018-2023</Copyright>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
     <Nullable>Enable</Nullable>
@@ -21,15 +21,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Commands" Version="3.2.0" />
-    <PackageReference Include="Discord.Net.Interactions" Version="3.2.0" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="3.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Discord.Net.Commands" Version="3.8.1" />
+    <PackageReference Include="Discord.Net.Interactions" Version="3.8.1" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="3.8.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Images\icon.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
