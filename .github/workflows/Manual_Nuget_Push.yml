@@ -9,20 +9,14 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_Build --host GitHubActions
+#         nuke --generate-configuration GitHubActions_Manual_Nuget_Push --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: Build
+name: Manual_Nuget_Push
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [workflow_dispatch]
 
 jobs:
   ubuntu-latest:
@@ -37,5 +31,7 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj', '**/Directory.Packages.props') }}
-      - name: 'Run: Compile'
-        run: ./build.cmd Compile
+      - name: 'Run: NugetPush'
+        run: ./build.cmd NugetPush
+        env:
+          NugetApiKey: ${{ secrets.NUGET_API_KEY }}

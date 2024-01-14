@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/Hawxy/Discord.Addons.Hosting</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
-    <Copyright>Hawxy 2018-2023</Copyright>
+    <Copyright>Hawxy 2018-2024</Copyright>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>discord,discord.net,addon,hosting,microsoft.extensions.hosting</PackageTags>
     <Nullable>Enable</Nullable>

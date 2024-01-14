@@ -15,7 +15,7 @@ try
 {
     var builder = Host.CreateApplicationBuilder(args);
 
-    // required Serilog.Extensions.Hosting
+    // requires Serilog.Extensions.Hosting
     builder.Services.AddSerilog();
         
     builder.Services.AddDiscordHost((config, _) =>
