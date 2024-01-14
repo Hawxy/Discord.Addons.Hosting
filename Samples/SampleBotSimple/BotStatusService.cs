@@ -5,7 +5,7 @@ using Discord.WebSocket;
 
 namespace Sample.Simple;
 
-public class BotStatusService : DiscordClientService
+public sealed class BotStatusService : DiscordClientService
 {
     public BotStatusService(DiscordSocketClient client, ILogger<DiscordClientService> logger) : base(client, logger)
     {

@@ -4,36 +4,40 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Sample.Simple;
 
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureDiscordHost((context, config) =>
-    {
-        config.SocketConfig = new DiscordSocketConfig
-        {
-            LogLevel = LogSeverity.Verbose,
-            AlwaysDownloadUsers = true,
-            MessageCacheSize = 200
-        };
+var builder = Host.CreateApplicationBuilder(args);
 
-        config.Token = context.Configuration["Token"];
-    })
-    //Omit this if you don't use the command service
-    .UseCommandService((context, config) =>
+builder.Services.AddDiscordHost((config, _) =>
+{
+    config.SocketConfig = new DiscordSocketConfig
     {
-        config.DefaultRunMode = RunMode.Async;
-        config.CaseSensitiveCommands = false;
-    })
-    .UseInteractionService((context, config) =>
-    {
-        config.LogLevel = LogSeverity.Info;
-        config.UseCompiledLambda = true;
-    })
-    .ConfigureServices((context, services) =>
-    {
-        //Add any other services here
-        services.AddHostedService<CommandHandler>();
-        services.AddHostedService<InteractionHandler>();
-        services.AddHostedService<BotStatusService>();
-        services.AddHostedService<LongRunningService>();
-    }).Build();
+        LogLevel = LogSeverity.Verbose,
+        AlwaysDownloadUsers = true,
+        MessageCacheSize = 200,
+        GatewayIntents = GatewayIntents.All
+    };
+
+    config.Token = builder.Configuration["Token"]!;
+});
+
+
+builder.Services.AddCommandService((config, _) =>
+{
+    config.DefaultRunMode = RunMode.Async;
+    config.CaseSensitiveCommands = false;
+});
+
+builder.Services.AddInteractionService((config, _) =>
+{
+    config.LogLevel = LogSeverity.Info;
+    config.UseCompiledLambda = true;
+});
+
+
+builder.Services.AddHostedService<CommandHandler>();
+builder.Services.AddHostedService<InteractionHandler>();
+builder.Services.AddHostedService<BotStatusService>();
+builder.Services.AddHostedService<LongRunningService>();
+
+var host = builder.Build();
 
 await host.RunAsync();

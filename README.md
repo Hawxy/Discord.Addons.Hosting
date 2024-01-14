@@ -1,10 +1,9 @@
 # Discord.Addons.Hosting 
-![.NET Core Build](https://github.com/Hawxy/Discord.Addons.Hosting/workflows/.NET%20Core%20Build/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/Discord.Addons.Hosting.svg?style=flat-square)](https://www.nuget.org/packages/Discord.Addons.Hosting)
 ![Nuget](https://img.shields.io/nuget/dt/Discord.Addons.Hosting?style=flat-square)
 
 [Discord.NET](https://github.com/RogueException/Discord.Net) hosting with [Microsoft.Extensions.Hosting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host). 
-This package provides extensions to a .NET Generic Host (`IHostBuilder`) that will run a Discord.NET socket/sharded client as an `IHostedService`, featuring:
+This package provides extensions that will run a Discord.NET socket/sharded client as an `IHostedService`, featuring:
 
 ✅ Simplified, best practice bot creation with a reduction in boilerplate.
 
@@ -17,52 +16,57 @@ This package provides extensions to a .NET Generic Host (`IHostBuilder`) that wi
 .NET  6.0+ is required.
 
 ```csharp
-// CreateDefaultBuilder configures a lot of stuff for us automatically
+// CreateApplicationBuilder configures a lot of stuff for us automatically
 // See: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host
-var host = Host.CreateDefaultBuilder()   
-    .ConfigureDiscordHost((context, config) =>
-    {
-        config.SocketConfig = new DiscordSocketConfig
-        {
-            LogLevel = LogSeverity.Verbose,
-            AlwaysDownloadUsers = true,
-            MessageCacheSize = 200
-        };
+var builder = Host.CreateApplicationBuilder(args);
 
-        config.Token = context.Configuration["token"];
-    })
-    // Optionally wire up the command service
-    .UseCommandService((context, config) =>
+// Configure Discord.NET
+builder.Services.AddDiscordHost((config, _) =>
+{
+    config.SocketConfig = new DiscordSocketConfig
     {
-        config.DefaultRunMode = RunMode.Async;
-        config.CaseSensitiveCommands = false;
-    })
-    // Optionally wire up the interactions service
-    .UseInteractionService((context, config) =>
-    {
-        config.LogLevel = LogSeverity.Info;
-        config.UseCompiledLambda = true;
-    })
-    .ConfigureServices((context, services) =>
-    {
-        //Add any other services here
-        services.AddHostedService<CommandHandler>();
-        services.AddHostedService<BotStatusService>();
-        services.AddHostedService<LongRunningService>();
-    }).Build();
-  
+        LogLevel = LogSeverity.Verbose,
+        AlwaysDownloadUsers = true,
+        MessageCacheSize = 200,
+        GatewayIntents = GatewayIntents.All
+    };
+
+    config.Token = builder.Configuration["Token"]!;
+});
+
+// Optionally wire up the command service
+builder.Services.AddCommandService((config, _) =>
+{
+    config.DefaultRunMode = RunMode.Async;
+    config.CaseSensitiveCommands = false;
+});
+
+// Optionally wire up the interaction service
+builder.Services.AddInteractionService((config, _) =>
+{
+    config.LogLevel = LogSeverity.Info;
+    config.UseCompiledLambda = true;
+});
+// Add any other services here
+builder.Services.AddHostedService<CommandHandler>();
+builder.Services.AddHostedService<InteractionHandler>();
+builder.Services.AddHostedService<BotStatusService>();
+builder.Services.AddHostedService<LongRunningService>();
+
+var host = builder.Build();
+
 await host.RunAsync();
 ```
 
 ## Getting Started
 
-1. Create a [.NET 6 Worker Service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-6.0&tabs=visual-studio#worker-service-template) using Visual Studio or via the dotnet cli (`dotnet new worker -o MyWorkerService`)
-2. Add ```Discord.Addons.Hosting``` to your project.   
+1. Create a [.NET 8 Worker Service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-8.0&tabs=visual-studio#worker-service-template) using Visual Studio or via the dotnet cli (`dotnet new worker -o MyWorkerService`)
+2. Add `Discord.Addons.Hosting` to your project.   
 3. Set your bot token via the [dotnet secrets manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#set-a-secret): `dotnet user-secrets set "token" "your-token-here"`
 4. Add your bot prefix to `appsettings.json`
 5. Configure your Discord client with `ConfigureDiscordHost`.
 6. Enable the `CommandService` and/or the `InteractionService` with `UseCommandService` and `UseInteractionService`
-6. Create and start your application using a HostBuilder as shown above and in the examples linked below.
+7. Create and start your application using a HostBuilder as shown above and in the examples linked below.
 
 ## Examples
 
@@ -72,12 +76,12 @@ Fully working examples are available [here](https://github.com/Hawxy/Discord.Add
 
 To use the sharded client instead of the socket client, simply replace `ConfigureDiscordHost` with `ConfigureDiscordShardedHost`:
 ```csharp
-.ConfigureDiscordShardedHost((context, config) =>
+.AddDiscordShardedHost((config, _) =>
 {
     config.SocketConfig = new DiscordSocketConfig
     {
     	// Manually set the required shards, or leave empty for the recommended count
-	TotalShards = 4
+	    TotalShards = 4
     };
 
     config.Token = context.Configuration["token"];
@@ -126,12 +130,7 @@ public class CommandHandler : DiscordClientService
 }
 ```
 ```csharp
- .ConfigureServices((context, services) =>
-{
-    services.AddHostedService<CommandHandler>();
-    //....
-});
-
+ builder.Services.AddHostedService<CommandHandler>();
 ```
  
  The `WaitForReadyAsync` extension method is also available for both client types to await execution of your service until the client has reached a Ready state:
@@ -163,7 +162,7 @@ public class BotStatusService : DiscordClientService
 
 When shutdown is requested, the host will wait a maximum of 5 seconds for services to stop before timing out.
 
-If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-5.0#shutdowntimeout).
+If you're finding that this isn't enough time, you can modify the shutdown timeout via the [ShutdownTimeout host setting](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-8.0#shutdowntimeout).
 
 ### IOptions
 

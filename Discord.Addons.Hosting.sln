@@ -11,12 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Simple", "Samples\Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.ShardedClient", "Samples\Sample.ShardedClient\Sample.ShardedClient.csproj", "{540A37B5-E304-49A4-B68E-08941C0D33F1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{5F0002A4-BACE-4097-A1B6-4350CEB9283F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F0002A4-BACE-4097-A1B6-4350CEB9283F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0002A4-BACE-4097-A1B6-4350CEB9283F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03ED5619-5F9E-4CC6-8B8F-7D610C3169EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{03ED5619-5F9E-4CC6-8B8F-7D610C3169EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03ED5619-5F9E-4CC6-8B8F-7D610C3169EB}.Release|Any CPU.ActiveCfg = Release|Any CPU

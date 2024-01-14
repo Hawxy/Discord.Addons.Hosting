@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2019-2022 Hawxy
+   Copyright 2019-2024 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public static class SocketClientExtensions
     internal static void RegisterSocketClientReady(this DiscordSocketClient client)
     {
         _socketTcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-        client.Ready += ClientReady;
+        client.Ready += async () => await ClientReady();
 
         Task ClientReady()
         {
