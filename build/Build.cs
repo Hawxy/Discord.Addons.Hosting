@@ -8,8 +8,8 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [GitHubActions(
     "Build",
     GitHubActionsImage.UbuntuLatest,
-    OnPushBranches = new []{ "main" },
-    OnPullRequestBranches = new []{ "main" },
+    OnPushBranches = new []{ "master" },
+    OnPullRequestBranches = new []{ "master" },
     InvokedTargets = new[] { nameof(Compile) })]
 [GitHubActions(
     "Manual Nuget Push",
