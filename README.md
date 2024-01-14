@@ -62,11 +62,12 @@ await host.RunAsync();
 
 1. Create a [.NET 8 Worker Service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-8.0&tabs=visual-studio#worker-service-template) using Visual Studio or via the dotnet cli (`dotnet new worker -o MyWorkerService`)
 2. Add `Discord.Addons.Hosting` to your project.   
-3. Set your bot token via the [dotnet secrets manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#set-a-secret): `dotnet user-secrets set "token" "your-token-here"`
+3. Set your bot token via the [dotnet secrets manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows#set-a-secret): `dotnet user-secrets set "token" "your-token-here"`
 4. Add your bot prefix to `appsettings.json`
-5. Configure your Discord client with `ConfigureDiscordHost`.
-6. Enable the `CommandService` and/or the `InteractionService` with `UseCommandService` and `UseInteractionService`
-7. Create and start your application using a HostBuilder as shown above and in the examples linked below.
+5. Configure your Discord client with `builder.Services.AddDiscordHost`.
+6. Enable the `CommandService` and/or the `InteractionService` with `builder.Services.AddCommandService` and `builder.Services.AddInteractionService`
+7. Register the relevant [InteractionHandler](https://github.com/Hawxy/Discord.Addons.Hosting/blob/master/Samples/SampleBotSimple/InteractionHandler.cs) and/or [CommandHandler](https://github.com/Hawxy/Discord.Addons.Hosting/blob/master/Samples/SampleBotSimple/CommandHandler.cs)
+8. Create and start your application using a HostBuilder as shown above and in the examples linked below.
 
 ## Examples
 
