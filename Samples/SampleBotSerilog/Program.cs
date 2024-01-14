@@ -2,10 +2,8 @@
 using Discord.Addons.Hosting;
 using Discord.Commands;
 using Discord.WebSocket;
-using Sample.Serilog;
 using Serilog;
 using Serilog.Events;
-
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -15,49 +13,46 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Starting host");
+    var builder = Host.CreateApplicationBuilder(args);
 
-    var host = Host.CreateDefaultBuilder(args)
-        // Serilog.Extensions.Hosting is required.
-        .UseSerilog()
-        .ConfigureDiscordHost((context, config) =>
+    // required Serilog.Extensions.Hosting
+    builder.Services.AddSerilog();
+        
+    builder.Services.AddDiscordHost((config, _) =>
+    {
+        config.SocketConfig = new DiscordSocketConfig
         {
-            config.SocketConfig = new DiscordSocketConfig
-            {
-                LogLevel = LogSeverity.Verbose,
-                AlwaysDownloadUsers = true,
-                MessageCacheSize = 200
-            };
+            LogLevel = LogSeverity.Verbose,
+            AlwaysDownloadUsers = true,
+            MessageCacheSize = 200,
+            GatewayIntents = GatewayIntents.All
+        };
 
-            config.Token = context.Configuration["Token"];
+        config.Token = builder.Configuration["Token"]!;
+        
+        //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for Serilog usage
+        config.LogFormat = (message, exception) => $"{message.Source}: {message.Message}";
+    });
 
-            //Use this to configure a custom format for Client/CommandService logging if needed. The default is below and should be suitable for Serilog usage
-            config.LogFormat = (message, exception) => $"{message.Source}: {message.Message}";
-        })
-        .UseCommandService((context, config) =>
-        {
-            config.LogLevel = LogSeverity.Info;
-            config.DefaultRunMode = RunMode.Async;
-        })
-        .UseInteractionService((context, config) =>
-        {
-            config.LogLevel = LogSeverity.Info;
-            config.UseCompiledLambda = true;
-        })
-        .ConfigureServices((context, services) =>
-        {
-            services.AddHostedService<CommandHandler>();
-            services.AddHostedService<InteractionHandler>();
-            services.AddHostedService<BotStatusService>();
-        }).Build();
+    builder.Services.AddCommandService((config, _) =>
+    {
+        config.DefaultRunMode = RunMode.Async;
+        config.CaseSensitiveCommands = false;
+    });
+
+    builder.Services.AddInteractionService((config, _) =>
+    {
+        config.LogLevel = LogSeverity.Info;
+        config.UseCompiledLambda = true;
+    });
+
+    var host = builder.Build();
 
     await host.RunAsync();
-    return 0;
 }
 catch (Exception ex)
 {
     Log.Fatal(ex, "Host terminated unexpectedly");
-    return 1;
 }
 finally
 {

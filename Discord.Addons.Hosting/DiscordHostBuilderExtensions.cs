@@ -1,6 +1,6 @@
 ﻿#region License
 /*
-   Copyright 2019-2022 Hawxy
+   Copyright 2019-2024 Hawxy
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,19 +16,15 @@
  */
 #endregion
 
-using Discord.Addons.Hosting.Injectables;
-using Discord.Addons.Hosting.Services;
-using Discord.Addons.Hosting.Util;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Discord.Addons.Hosting;
 
 /// <summary>
-/// Extends <see cref="IHostBuilder"/> with Discord.Net configuration methods.
+/// Extensions <see cref="IHostBuilder"/> with Discord.Net configuration options.
 /// </summary>
 public static class DiscordHostBuilderExtensions
 {
@@ -42,16 +38,13 @@ public static class DiscordHostBuilderExtensions
     /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
     /// <returns>The generic host builder.</returns>
     /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-    public static IHostBuilder ConfigureDiscordShardedHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null)
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddDiscordShardedHost. See the Discord.Addons.Hosting repository for more information.")]
+    public static IHostBuilder ConfigureDiscordShardedHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration> config)
     {
-        builder.ConfigureDiscordHostInternal<DiscordShardedClient>(config);
-
-        return builder.ConfigureServices((_, collection) =>
+        ArgumentNullException.ThrowIfNull(config);
+        return builder.ConfigureServices((context, collection) =>
         {
-            if (collection.Any(x => x.ServiceType.BaseType == typeof(BaseSocketClient)))
-                throw new InvalidOperationException("Cannot add more than one Discord Client to host");
-
-            collection.AddSingleton<DiscordShardedClient, InjectableDiscordShardedClient>();
+            collection.AddDiscordShardedHost((hostConfig, _) => config(context, hostConfig));
         });
     }
 
@@ -65,44 +58,14 @@ public static class DiscordHostBuilderExtensions
     /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
     /// <returns>The generic host builder.</returns>
     /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-    public static IHostBuilder ConfigureDiscordHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null)
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddDiscordHost. See the Discord.Addons.Hosting repository for more information.")]
+    public static IHostBuilder ConfigureDiscordHost(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration> config)
     {
-        builder.ConfigureDiscordHostInternal<DiscordSocketClient>(config);
-
-        return builder.ConfigureServices((_, collection) =>
+        ArgumentNullException.ThrowIfNull(config);
+        return builder.ConfigureServices((context, collection) =>
         {
-            if (collection.Any(x => x.ServiceType.BaseType == typeof(BaseSocketClient)))
-                throw new InvalidOperationException("Cannot add more than one Discord Client to host");
-
-            collection.AddSingleton<DiscordSocketClient, InjectableDiscordSocketClient>();
+            collection.AddDiscordHost((hostConfig, _) => config(context, hostConfig));
         });
-    }
-
-    private static void ConfigureDiscordHostInternal<T>(this IHostBuilder builder, Action<HostBuilderContext, DiscordHostConfiguration>? config = null) where T: BaseSocketClient
-    {
-        builder.ConfigureServices((context, collection) =>
-        {
-            collection.AddOptions<DiscordHostConfiguration>().Validate(x => ValidateToken(x.Token));
-
-            if (config != null)
-                collection.Configure<DiscordHostConfiguration>(x => config(context, x));
-                
-            collection.AddSingleton(typeof(LogAdapter<>));
-            collection.AddHostedService<DiscordHostedService<T>>();
-        });
-
-        static bool ValidateToken(string token)
-        {
-            try
-            {
-                TokenUtils.ValidateToken(TokenType.Bot, token);
-                return true;
-            }
-            catch (Exception e) when (e is ArgumentNullException or ArgumentException)
-            {
-                return false;
-            }
-        }
     }
 
     /// <summary>
@@ -111,7 +74,9 @@ public static class DiscordHostBuilderExtensions
     /// <param name="builder">The host builder to configure.</param> 
     /// <returns>The (generic) host builder.</returns>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
-    public static IHostBuilder UseCommandService(this IHostBuilder builder) => builder.UseCommandService((context, config) => { });
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddCommandService. See the Discord.Addons.Hosting repository for more information.")]
+    public static IHostBuilder UseCommandService(this IHostBuilder builder) =>
+        builder.ConfigureServices((_, collection) => collection.AddCommandService());
 
     /// <summary>
     /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.NET client. />
@@ -124,19 +89,13 @@ public static class DiscordHostBuilderExtensions
     /// <returns>The (generic) host builder.</returns>
     /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddCommandService. See the Discord.Addons.Hosting repository for more information.")]
     public static IHostBuilder UseCommandService(this IHostBuilder builder, Action<HostBuilderContext, CommandServiceConfig> config)
     {
         ArgumentNullException.ThrowIfNull(config);
-
         builder.ConfigureServices((context, collection) =>
         {
-            if (collection.Any(x => x.ServiceType == typeof(CommandService)))
-                throw new InvalidOperationException("Cannot add more than one CommandService to host");
-
-            collection.Configure<CommandServiceConfig>(x => config(context, x));
-
-            collection.AddSingleton<CommandService, InjectableCommandService>();
-            collection.AddHostedService<CommandServiceRegistrationHost>();
+            collection.AddCommandService((commandServiceConfig, _) => config(context, commandServiceConfig));
         });
 
         return builder;
@@ -148,7 +107,12 @@ public static class DiscordHostBuilderExtensions
     /// <param name="builder">The host builder to configure.</param> 
     /// <returns>The (generic) host builder.</returns>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
-    public static IHostBuilder UseInteractionService(this IHostBuilder builder) => builder.UseInteractionService((context, config) => { });
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddInteractionService. See the Discord.Addons.Hosting repository for more information.")]
+    public static IHostBuilder UseInteractionService(this IHostBuilder builder) => builder.ConfigureServices(
+        (_, collection) =>
+        {
+            collection.AddInteractionService();
+        }); 
 
 
     /// <summary>
@@ -162,19 +126,14 @@ public static class DiscordHostBuilderExtensions
     /// <returns>The (generic) host builder.</returns>
     /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
+    [Obsolete("This extension is obsolete and will be removed in a future version. Replace with builder.Services.AddInteractionService. See the Discord.Addons.Hosting repository for more information.")]
     public static IHostBuilder UseInteractionService(this IHostBuilder builder, Action<HostBuilderContext, InteractionServiceConfig> config)
     {
         ArgumentNullException.ThrowIfNull(config);
 
         builder.ConfigureServices((context, collection) =>
         {
-            if (collection.Any(x => x.ServiceType == typeof(InteractionService)))
-                throw new InvalidOperationException("Cannot add more than one InteractionService to host");
-
-            collection.Configure<InteractionServiceConfig>(x => config(context, x));
-
-            collection.AddSingleton<InteractionService, InjectableInteractionService>();
-            collection.AddHostedService<InteractionServiceRegistrationHost>();
+            collection.AddInteractionService((interactionConfig, _) => config(context, interactionConfig));
         });
 
         return builder;

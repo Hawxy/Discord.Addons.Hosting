@@ -4,37 +4,39 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Sample.ShardedClient;
 
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureDiscordShardedHost((context, config) =>
-    {
-        config.SocketConfig = new DiscordSocketConfig
-        {
-            LogLevel = LogSeverity.Verbose,
-            AlwaysDownloadUsers = true,
-            MessageCacheSize = 200,
-            TotalShards = 4
-        };
+var builder = Host.CreateApplicationBuilder(args);
 
-        config.Token = context.Configuration["Token"];
+builder.Services.AddDiscordShardedHost((config, _) =>
+{
+    config.SocketConfig = new DiscordSocketConfig
+    {
+        LogLevel = LogSeverity.Verbose,
+        AlwaysDownloadUsers = true,
+        MessageCacheSize = 200,
+    };
 
-        config.ShardIds = new[] { 1 };
-    })
-    .UseCommandService((context, config) =>
-    {
-        config.DefaultRunMode = RunMode.Async;
-        config.CaseSensitiveCommands = false;
-    })
-    .UseInteractionService((context, config) =>
-    {
-        config.LogLevel = LogSeverity.Info;
-        config.UseCompiledLambda = true;
-    })
-    .ConfigureServices((context, services) =>
-    {
-        //Add any other services here
-        services.AddHostedService<CommandHandler>();
-        services.AddHostedService<InteractionHandler>();
-        services.AddHostedService<BotStatusService>();
-    }).Build();
+    config.Token = builder.Configuration["Token"]!;
+});
+
+builder.Services.AddCommandService((config, _) =>
+{
+    config.DefaultRunMode = RunMode.Async;
+    config.CaseSensitiveCommands = false;
+});
+
+builder.Services.AddInteractionService((config, _) =>
+{
+    config.LogLevel = LogSeverity.Info;
+    config.UseCompiledLambda = true;
+});
+
+
+builder.Services.AddHostedService<CommandHandler>();
+builder.Services.AddHostedService<InteractionHandler>();
+builder.Services.AddHostedService<BotStatusService>();
+
+var host = builder.Build();
+
+await host.RunAsync();
 
 await host.RunAsync();
