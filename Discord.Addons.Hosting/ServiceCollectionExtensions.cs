@@ -34,12 +34,12 @@ public static class ServiceCollectionExtensions
     /// Adds and optionally configures a <see cref="DiscordShardedClient"/> along with the required services.
     /// </summary>
     /// <remarks>
-    /// A <see cref="IServiceProvider"/> is supplied so you can pull data from additional services if required.
+    /// A <see cref="IServiceProvider"/> is supplied, so you can pull data from additional services if required.
     /// </remarks>
     /// <param name="collection">The service collection to configure.</param>
     /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
     /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-    public static void AddDiscordShardedHost(this IServiceCollection collection, Action<DiscordHostConfiguration, IServiceProvider> config)
+    public static IServiceCollection AddDiscordShardedHost(this IServiceCollection collection, Action<DiscordHostConfiguration, IServiceProvider> config)
     {
         collection.AddDiscordHostInternal<DiscordShardedClient>(config);
 
@@ -47,18 +47,20 @@ public static class ServiceCollectionExtensions
             throw new InvalidOperationException("Cannot add more than one Discord Client to host");
 
         collection.AddSingleton<DiscordShardedClient, InjectableDiscordShardedClient>();
+
+        return collection;
     }
 
     /// <summary>
     /// Adds and optionally configures a <see cref="DiscordSocketClient"/> along with the required services.
     /// </summary>
     /// <remarks>
-    /// A <see cref="IServiceProvider"/> is supplied so you can pull data from additional services if required.
+    /// A <see cref="IServiceProvider"/> is supplied, so you can pull data from additional services if required.
     /// </remarks>
     /// <param name="builder">The host builder to configure.</param>
     /// <param name="config">The delegate for the <see cref="DiscordHostConfiguration" /> that will be used to configure the host.</param>
     /// <exception cref="InvalidOperationException">Thrown if client is already added to the service collection</exception>
-    public static void AddDiscordHost(this IServiceCollection builder, Action<DiscordHostConfiguration, IServiceProvider> config)
+    public static IServiceCollection AddDiscordHost(this IServiceCollection builder, Action<DiscordHostConfiguration, IServiceProvider> config)
     {
         builder.AddDiscordHostInternal<DiscordSocketClient>(config);
 
@@ -66,6 +68,8 @@ public static class ServiceCollectionExtensions
             throw new InvalidOperationException("Cannot add more than one Discord Client to host");
 
         builder.AddSingleton<DiscordSocketClient, InjectableDiscordSocketClient>();
+
+        return builder;
     }
 
     private static void AddDiscordHostInternal<T>(this IServiceCollection collection, Action<DiscordHostConfiguration, IServiceProvider> config) where T: BaseSocketClient
@@ -96,19 +100,19 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="collection">The service collection to configure.</param>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
-    public static void AddCommandService(this IServiceCollection collection) => collection.AddCommandService((context, config) => { });
+    public static IServiceCollection AddCommandService(this IServiceCollection collection) => collection.AddCommandService((context, config) => { });
 
     /// <summary>
     /// Adds a <see cref="CommandService"/> instance to the host for use with a Discord.NET client. />
     /// </summary>
     /// <remarks>
-    /// A <see cref="IServiceProvider"/> is supplied so you can pull data from additional services if required.
+    /// A <see cref="IServiceProvider"/> is supplied, so you can pull data from additional services if required.
     /// </remarks>
     /// <param name="collection">The service collection to configure.</param>
     /// <param name="config">The delegate for configuring the <see cref="CommandServiceConfig" /> that will be used to initialise the service.</param>
     /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="CommandService"/> is already added to the collection</exception>
-    public static void AddCommandService(this IServiceCollection collection, Action<CommandServiceConfig, IServiceProvider> config)
+    public static IServiceCollection AddCommandService(this IServiceCollection collection, Action<CommandServiceConfig, IServiceProvider> config)
     {
         ArgumentNullException.ThrowIfNull(config);
 
@@ -119,6 +123,8 @@ public static class ServiceCollectionExtensions
 
         collection.AddSingleton<CommandService, InjectableCommandService>();
         collection.AddHostedService<CommandServiceRegistrationHost>();
+
+        return collection;
     }
 
     /// <summary>
@@ -126,20 +132,20 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="collection">The service collection to configure.</param>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
-    public static void AddInteractionService(this IServiceCollection collection) => collection.AddInteractionService((_, _) => { });
+    public static IServiceCollection AddInteractionService(this IServiceCollection collection) => collection.AddInteractionService((_, _) => { });
 
 
     /// <summary>
     /// Adds a <see cref="InteractionService"/> instance to the host for use with a Discord.NET client. />
     /// </summary>
     /// <remarks>
-    /// A <see cref="IServiceProvider"/> is supplied so you can pull data from additional services if required.
+    /// A <see cref="IServiceProvider"/> is supplied, so you can pull data from additional services if required.
     /// </remarks>
     /// <param name="collection">The service collection to configure.</param>
     /// <param name="config">The delegate for configuring the <see cref="InteractionServiceConfig" /> that will be used to initialise the service.</param>
     /// <exception cref="ArgumentNullException">Thrown if config is null</exception>
     /// <exception cref="InvalidOperationException">Thrown if <see cref="InteractionService"/> is already added to the collection</exception>
-    public static void AddInteractionService(this IServiceCollection collection, Action<InteractionServiceConfig, IServiceProvider> config)
+    public static IServiceCollection AddInteractionService(this IServiceCollection collection, Action<InteractionServiceConfig, IServiceProvider> config)
     {
         ArgumentNullException.ThrowIfNull(config);
 
@@ -150,6 +156,7 @@ public static class ServiceCollectionExtensions
 
         collection.AddSingleton<InteractionService, InjectableInteractionService>();
         collection.AddHostedService<InteractionServiceRegistrationHost>();
-        
+
+        return collection;
     }
 }
